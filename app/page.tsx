@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SubscribeWidget } from "@/components/SubscribeWidget";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
               Contact
             </a>
           </div>
+          <SubscribeWidget variant="hero" source="hero" />
         </div>
       </section>
     </main>

@@ -1,8 +1,9 @@
 "use client";
 
 import { Turnstile } from "@marsidev/react-turnstile";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ResultPanel } from "./ResultPanel";
+import { SubscribeWidget } from "./SubscribeWidget";
 import type { OptimizeResult } from "@/lib/types";
 
 const SAMPLE_PROMPT = "tell me about AI";
@@ -35,10 +36,25 @@ export function PromptOptimizerForm() {
   const [copied, setCopied] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileKey, setTurnstileKey] = useState(0);
+  const [optCount, setOptCount] = useState(0);
 
   const activePrompt = result?.optimized || prompt;
   const chatLinks = useMemo(() => buildChatLinks(activePrompt), [activePrompt]);
   const canSubmit = Boolean(TURNSTILE_SITE_KEY && turnstileToken && !isLoading);
+  const showInlineSubscribe = optCount >= 3;
+
+  useEffect(() => {
+    const savedCount = Number(window.localStorage.getItem("opt_count") || "0");
+    setOptCount(Number.isFinite(savedCount) ? savedCount : 0);
+  }, []);
+
+  function recordSuccessfulOptimize() {
+    setOptCount((currentCount) => {
+      const nextCount = currentCount + 1;
+      window.localStorage.setItem("opt_count", String(nextCount));
+      return nextCount;
+    });
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -78,6 +94,7 @@ export function PromptOptimizerForm() {
       }
 
       setResult(data as OptimizeResult);
+      recordSuccessfulOptimize();
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The optimizer could not complete this request.");
     } finally {
@@ -168,7 +185,10 @@ export function PromptOptimizerForm() {
         </div>
       </form>
 
-      <ResultPanel result={result} error={error} isLoading={isLoading} onCopy={handleCopy} copied={copied} />
+      <div className="flex flex-col gap-6">
+        <ResultPanel result={result} error={error} isLoading={isLoading} onCopy={handleCopy} copied={copied} />
+        {showInlineSubscribe ? <SubscribeWidget variant="inline" source="tool" /> : null}
+      </div>
     </div>
   );
 }
