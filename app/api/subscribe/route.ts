@@ -52,6 +52,17 @@ function isAlreadySubscribed(status: number, payload: unknown) {
   );
 }
 
+function getButtondownErrorHint(payload: unknown) {
+  const raw = typeof payload === "string" ? payload : JSON.stringify(payload);
+
+  return raw
+    .replace(/[^\s"'<>]+@[^\s"'<>]+/g, "[email]")
+    .replace(/[^\w .,:;[\]{}()-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 180);
+}
+
 function getClientIp(request: NextRequest) {
   return (
     request.headers.get("cf-connecting-ip") ||
@@ -144,6 +155,7 @@ export async function POST(request: NextRequest) {
         status: 502,
         headers: {
           "x-buttondown-status": String(result.status),
+          "x-buttondown-error-hint": getButtondownErrorHint(result.payload),
         },
       },
     );
