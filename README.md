@@ -40,4 +40,22 @@ Required variables:
 npm run dev
 npm run build
 npm run lint
+npm run pages:build
+npm run pages:deploy
 ```
+
+## Cloudflare Pages
+
+Use these settings when connecting the GitHub repository to Cloudflare Pages:
+
+- Project name: `tools-app`
+- Production branch: `main`
+- Build command: `npx @cloudflare/next-on-pages`
+- Build output directory: `.vercel/output/static`
+
+Production environment variables:
+
+- `ANTHROPIC_API_KEY_TOOLS`
+- `BUTTONDOWN_API_KEY`
+- `TURNSTILE_SECRET_KEY`
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
