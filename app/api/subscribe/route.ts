@@ -27,8 +27,17 @@ function isAlreadySubscribed(status: number, payload: unknown) {
   }
 
   const message = typeof payload === "string" ? payload : JSON.stringify(payload);
+  const normalizedMessage = message.toLowerCase();
 
-  return message.toLowerCase().includes("already");
+  return normalizedMessage.includes("already") || normalizedMessage.includes("duplicate");
+}
+
+function getClientIp(request: NextRequest) {
+  return (
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    undefined
+  );
 }
 
 export async function POST(request: NextRequest) {
@@ -56,6 +65,7 @@ export async function POST(request: NextRequest) {
   }
 
   const source = normalizeSource(body.source);
+  const clientIp = getClientIp(request);
 
   try {
     const response = await fetch(BUTTONDOWN_ENDPOINT, {
@@ -67,6 +77,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         email_address: email,
         tags: ["tools-app", source],
+        ...(clientIp ? { ip_address: clientIp } : {}),
       }),
     });
 
@@ -89,7 +100,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { error: "Subscription failed, please try again later" },
-      { status: 502 },
+      {
+        status: 502,
+        headers: {
+          "x-buttondown-status": String(response.status),
+        },
+      },
     );
   } catch {
     return NextResponse.json(
