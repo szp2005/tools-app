@@ -11,6 +11,18 @@ type SubscribeRequestBody = {
   source?: unknown;
 };
 
+type ButtondownPayload = {
+  email_address: string;
+  tags: string[];
+  ip_address?: string;
+};
+
+type ButtondownResult = {
+  status: number;
+  ok: boolean;
+  payload: unknown;
+};
+
 function normalizeSource(source: unknown) {
   if (typeof source !== "string") {
     return "default";
@@ -48,6 +60,37 @@ function getClientIp(request: NextRequest) {
   );
 }
 
+async function createButtondownSubscriber(
+  apiKey: string,
+  payload: ButtondownPayload,
+  collisionBehavior?: "add",
+): Promise<ButtondownResult> {
+  const response = await fetch(BUTTONDOWN_ENDPOINT, {
+    method: "POST",
+    headers: {
+      Authorization: `Token ${apiKey}`,
+      "Content-Type": "application/json",
+      ...(collisionBehavior ? { "X-Buttondown-Collision-Behavior": collisionBehavior } : {}),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (response.status === 200 || response.status === 201) {
+    return { status: response.status, ok: true, payload: null };
+  }
+
+  const responseText = await response.text().catch(() => "");
+  let payloadBody: unknown = responseText;
+
+  try {
+    payloadBody = responseText ? JSON.parse(responseText) : "";
+  } catch {
+    payloadBody = responseText;
+  }
+
+  return { status: response.status, ok: false, payload: payloadBody };
+}
+
 export async function POST(request: NextRequest) {
   let body: SubscribeRequestBody;
 
@@ -74,36 +117,25 @@ export async function POST(request: NextRequest) {
 
   const source = normalizeSource(body.source);
   const clientIp = getClientIp(request);
+  const payload = {
+    email_address: email,
+    tags: ["tools-app", source],
+    ...(clientIp ? { ip_address: clientIp } : {}),
+  };
 
   try {
-    const response = await fetch(BUTTONDOWN_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Authorization: `Token ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email_address: email,
-        tags: ["tools-app", source],
-        ...(clientIp ? { ip_address: clientIp } : {}),
-      }),
-    });
+    const result = await createButtondownSubscriber(apiKey, payload);
 
-    if (response.status === 200 || response.status === 201) {
+    if (result.ok) {
       return NextResponse.json({ ok: true });
     }
 
-    const responseText = await response.text().catch(() => "");
-    let payload: unknown = responseText;
+    if (result.status === 400) {
+      const upsert = await createButtondownSubscriber(apiKey, payload, "add");
 
-    try {
-      payload = responseText ? JSON.parse(responseText) : "";
-    } catch {
-      payload = responseText;
-    }
-
-    if (isAlreadySubscribed(response.status, payload)) {
-      return NextResponse.json({ ok: true, already: true });
+      if (upsert.ok || isAlreadySubscribed(result.status, result.payload)) {
+        return NextResponse.json({ ok: true, already: true });
+      }
     }
 
     return NextResponse.json(
@@ -111,7 +143,7 @@ export async function POST(request: NextRequest) {
       {
         status: 502,
         headers: {
-          "x-buttondown-status": String(response.status),
+          "x-buttondown-status": String(result.status),
         },
       },
     );
