@@ -25,7 +25,7 @@ type AnthropicMessageResponse = {
 const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
 
 function getApiKey() {
-  return process.env.ANTHROPIC_API_KEY_TOOLS || process.env.ANTHROPIC_API_KEY;
+  return process.env.ANTHROPIC_API_KEY_TOOLS;
 }
 
 function extractText(content: AnthropicMessageResponse["content"]) {
@@ -77,7 +77,7 @@ export async function optimizePrompt(prompt: string): Promise<OptimizeResult> {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: process.env.ANTHROPIC_MODEL || DEFAULT_MODEL,
+        model: DEFAULT_MODEL,
         max_tokens: 1200,
         temperature: 0.2,
         system: PROMPT_OPTIMIZER_SYSTEM_PROMPT,

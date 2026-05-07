@@ -21,8 +21,6 @@ Copy `.env.example` to `.env.local` and fill the values locally. Do not commit s
 Required variables:
 
 - `ANTHROPIC_API_KEY_TOOLS`
-- `ANTHROPIC_API_KEY`
-- `ANTHROPIC_MODEL`
 - `BUTTONDOWN_API_KEY`
 - `TURNSTILE_SECRET_KEY`
 - `TURNSTILE_SITE_KEY`
