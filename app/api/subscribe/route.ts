@@ -14,6 +14,7 @@ type SubscribeRequestBody = {
 type ButtondownPayload = {
   email_address: string;
   tags: string[];
+  type: "regular";
   ip_address?: string;
 };
 
@@ -21,6 +22,11 @@ type ButtondownResult = {
   status: number;
   ok: boolean;
   payload: unknown;
+};
+
+type ButtondownRequestOptions = {
+  bypassFirewall?: boolean;
+  collisionBehavior?: "add";
 };
 
 function normalizeSource(source: unknown) {
@@ -34,6 +40,10 @@ function normalizeSource(source: unknown) {
 }
 
 function isAlreadySubscribed(status: number, payload: unknown) {
+  if (status === 409) {
+    return true;
+  }
+
   if (status !== 400) {
     return false;
   }
@@ -52,15 +62,20 @@ function isAlreadySubscribed(status: number, payload: unknown) {
   );
 }
 
-function getButtondownErrorHint(payload: unknown) {
+function getButtondownMessage(payload: unknown) {
   const raw = typeof payload === "string" ? payload : JSON.stringify(payload);
 
-  return raw
-    .replace(/[^\s"'<>]+@[^\s"'<>]+/g, "[email]")
-    .replace(/[^\w .,:;[\]{}()-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 180);
+  return raw.toLowerCase();
+}
+
+function isFirewallBlocked(status: number, payload: unknown) {
+  if (status !== 400) {
+    return false;
+  }
+
+  const message = getButtondownMessage(payload);
+
+  return message.includes("subscriber_blocked") || message.includes("firewall");
 }
 
 function getClientIp(request: NextRequest) {
@@ -74,14 +89,17 @@ function getClientIp(request: NextRequest) {
 async function createButtondownSubscriber(
   apiKey: string,
   payload: ButtondownPayload,
-  collisionBehavior?: "add",
+  options: ButtondownRequestOptions = {},
 ): Promise<ButtondownResult> {
   const response = await fetch(BUTTONDOWN_ENDPOINT, {
     method: "POST",
     headers: {
-      Authorization: `Token ${apiKey}`,
+      Authorization: apiKey.toLowerCase().startsWith("token ") ? apiKey : `Token ${apiKey}`,
       "Content-Type": "application/json",
-      ...(collisionBehavior ? { "X-Buttondown-Collision-Behavior": collisionBehavior } : {}),
+      ...(options.bypassFirewall ? { "X-Buttondown-Bypass-Firewall": "true" } : {}),
+      ...(options.collisionBehavior
+        ? { "X-Buttondown-Collision-Behavior": options.collisionBehavior }
+        : {}),
     },
     body: JSON.stringify(payload),
   });
@@ -117,7 +135,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
   }
 
-  const apiKey = process.env.BUTTONDOWN_API_KEY;
+  const apiKey = process.env.BUTTONDOWN_API_KEY?.trim();
 
   if (!apiKey) {
     return NextResponse.json(
@@ -131,6 +149,7 @@ export async function POST(request: NextRequest) {
   const payload = {
     email_address: email,
     tags: ["tools-app", source],
+    type: "regular" as const,
     ...(clientIp ? { ip_address: clientIp } : {}),
   };
 
@@ -141,8 +160,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    if (result.status === 400) {
-      const upsert = await createButtondownSubscriber(apiKey, payload, "add");
+    if (isFirewallBlocked(result.status, result.payload)) {
+      const bypass = await createButtondownSubscriber(apiKey, payload, {
+        bypassFirewall: true,
+        collisionBehavior: "add",
+      });
+
+      if (bypass.ok) {
+        return NextResponse.json({ ok: true });
+      }
+
+      if (isAlreadySubscribed(bypass.status, bypass.payload)) {
+        return NextResponse.json({ ok: true, already: true });
+      }
+    }
+
+    if (result.status === 400 || result.status === 409) {
+      const upsert = await createButtondownSubscriber(apiKey, payload, {
+        collisionBehavior: "add",
+      });
 
       if (upsert.ok || isAlreadySubscribed(result.status, result.payload)) {
         return NextResponse.json({ ok: true, already: true });
@@ -155,7 +191,6 @@ export async function POST(request: NextRequest) {
         status: 502,
         headers: {
           "x-buttondown-status": String(result.status),
-          "x-buttondown-error-hint": getButtondownErrorHint(result.payload),
         },
       },
     );
