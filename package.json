@@ -11,6 +11,7 @@
     "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name=tools-app"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.95.0",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18"
