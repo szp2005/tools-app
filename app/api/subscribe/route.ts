@@ -29,7 +29,15 @@ function isAlreadySubscribed(status: number, payload: unknown) {
   const message = typeof payload === "string" ? payload : JSON.stringify(payload);
   const normalizedMessage = message.toLowerCase();
 
-  return normalizedMessage.includes("already") || normalizedMessage.includes("duplicate");
+  if (normalizedMessage.includes("does not exist") || normalizedMessage.includes("not found")) {
+    return false;
+  }
+
+  return (
+    normalizedMessage.includes("already") ||
+    normalizedMessage.includes("duplicate") ||
+    normalizedMessage.includes("exist")
+  );
 }
 
 function getClientIp(request: NextRequest) {
