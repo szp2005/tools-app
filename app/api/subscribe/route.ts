@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const BUTTONDOWN_ENDPOINT = "https://api.buttondown.email/v1/subscribers";
+const BUTTONDOWN_ENDPOINT = "https://api.buttondown.com/v1/subscribers";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const SOURCES = new Set(["hero", "footer", "tool", "default"]);
 
