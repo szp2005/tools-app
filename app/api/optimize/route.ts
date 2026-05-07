@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { optimizePrompt } from "@/lib/anthropic";
+import { checkRateLimit, incrementRateLimit } from "@/lib/rateLimit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
 export const runtime = "edge";
@@ -13,7 +14,7 @@ function getClientIp(request: NextRequest) {
   return (
     request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    null
+    "local"
   );
 }
 
@@ -39,13 +40,25 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const turnstile = await verifyTurnstileToken(turnstileToken, getClientIp(request));
+    const clientIp = getClientIp(request);
+    const turnstile = await verifyTurnstileToken(turnstileToken, clientIp);
 
-    if (!turnstile.success && !turnstile.skipped) {
+    if (!turnstile.success) {
       return NextResponse.json({ error: "Captcha verification failed." }, { status: 403 });
     }
 
+    const rateLimit = await checkRateLimit(clientIp);
+
+    if (rateLimit.limited) {
+      return NextResponse.json(
+        { error: "今日额度已用完，订阅 Newsletter 可解锁更多额度" },
+        { status: 429 },
+      );
+    }
+
     const result = await optimizePrompt(prompt);
+    await incrementRateLimit(clientIp);
+
     return NextResponse.json(result);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

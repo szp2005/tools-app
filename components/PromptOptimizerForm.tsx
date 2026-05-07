@@ -1,10 +1,12 @@
 "use client";
 
+import { Turnstile } from "@marsidev/react-turnstile";
 import { useMemo, useState } from "react";
 import { ResultPanel } from "./ResultPanel";
 import type { OptimizeResult } from "@/lib/types";
 
 const SAMPLE_PROMPT = "tell me about AI";
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 function buildChatLinks(prompt: string) {
   const encoded = encodeURIComponent(prompt);
@@ -31,9 +33,12 @@ export function PromptOptimizerForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const activePrompt = result?.optimized || prompt;
   const chatLinks = useMemo(() => buildChatLinks(activePrompt), [activePrompt]);
+  const canSubmit = Boolean(TURNSTILE_SITE_KEY && turnstileToken && !isLoading);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,6 +52,11 @@ export function PromptOptimizerForm() {
       return;
     }
 
+    if (!turnstileToken) {
+      setError("Please complete the verification before optimizing.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -57,7 +67,7 @@ export function PromptOptimizerForm() {
         },
         body: JSON.stringify({
           prompt: trimmedPrompt,
-          turnstileToken: "",
+          turnstileToken,
         }),
       });
 
@@ -72,6 +82,8 @@ export function PromptOptimizerForm() {
       setError(requestError instanceof Error ? requestError.message : "The optimizer could not complete this request.");
     } finally {
       setIsLoading(false);
+      setTurnstileToken("");
+      setTurnstileKey((currentKey) => currentKey + 1);
     }
   }
 
@@ -110,15 +122,35 @@ export function PromptOptimizerForm() {
           placeholder="Example: tell me about AI"
         />
 
-        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-slate-500">{prompt.length}/4000 characters</p>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="rounded-md bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-          >
-            {isLoading ? "Optimizing..." : "Optimize Prompt"}
-          </button>
+        <div className="mt-4 flex flex-col gap-4">
+          {TURNSTILE_SITE_KEY ? (
+            <Turnstile
+              key={turnstileKey}
+              siteKey={TURNSTILE_SITE_KEY}
+              onSuccess={setTurnstileToken}
+              onExpire={() => setTurnstileToken("")}
+              onError={() => setTurnstileToken("")}
+              options={{
+                theme: "light",
+                size: "flexible",
+              }}
+            />
+          ) : (
+            <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              Verification is not configured yet.
+            </div>
+          )}
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-slate-500">{prompt.length}/4000 characters</p>
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              className="rounded-md bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+            >
+              {isLoading ? "Optimizing..." : "Optimize Prompt"}
+            </button>
+          </div>
         </div>
 
         <div className="mt-5 grid gap-2 sm:grid-cols-3">

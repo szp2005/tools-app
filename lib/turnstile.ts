@@ -9,8 +9,7 @@ export async function verifyTurnstileToken(token: string, ip?: string | null) {
   if (!secret || !token) {
     return {
       success: false,
-      skipped: true,
-      reason: "Turnstile enforcement is scheduled for Day 5.",
+      reason: !secret ? "Turnstile secret is not configured." : "Turnstile token is missing.",
     };
   }
 
@@ -30,7 +29,6 @@ export async function verifyTurnstileToken(token: string, ip?: string | null) {
   if (!response.ok) {
     return {
       success: false,
-      skipped: false,
       reason: "Turnstile verification request failed.",
     };
   }
@@ -39,7 +37,6 @@ export async function verifyTurnstileToken(token: string, ip?: string | null) {
 
   return {
     success: result.success,
-    skipped: false,
     reason: result.success ? undefined : result["error-codes"]?.join(", "),
   };
 }

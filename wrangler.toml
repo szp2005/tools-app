@@ -1,2 +1,6 @@
 compatibility_date = "2026-05-07"
 compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "8306a3eeac9c4527a52a6aed188de2f2"
