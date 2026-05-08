@@ -5,7 +5,7 @@ const toolCards = [
   {
     name: "Prompt Optimizer",
     description: "Turn rough instructions into structured prompts for ChatGPT, Claude, and Gemini.",
-    status: "Live",
+    status: "Available",
     href: "/prompt-optimizer",
   },
   {
@@ -40,7 +40,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl">
           <div className="grid gap-4 md:grid-cols-3">
             {toolCards.map((tool) => {
-              const isAvailable = tool.status === "Live" || tool.status === "Available";
+              const isAvailable = tool.status === "Available";
               const cardContent = (
                 <>
                   <div className="flex items-start justify-between gap-4">
