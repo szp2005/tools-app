@@ -16,7 +16,9 @@ const geistMono = localFont({
 
 const title = "Tools App — Free AI tools for solopreneurs";
 const description = "Optimize prompts, get weekly digests, save hours every week. No signup wall.";
-const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const googleSiteVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
+  "ufpv__Iei4LAF7AAjhGwvgIeoncGze2Jmib95HVDNJw";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tools.toolrouteai.com"),
