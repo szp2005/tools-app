@@ -1,0 +1,15 @@
+import type { MetadataRoute } from "next";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const base = "https://tools.toolrouteai.com";
+
+  return [
+    { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
+    {
+      url: `${base}/prompt-optimizer`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+  ];
+}

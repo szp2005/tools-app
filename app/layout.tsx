@@ -14,9 +14,26 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const title = "Tools App — Free AI tools for solopreneurs";
+const description = "Optimize prompts, get weekly digests, save hours every week. No signup wall.";
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
-  title: "Tools App",
-  description: "Free AI tools and newsletter resources for faster work.",
+  metadataBase: new URL("https://tools.toolrouteai.com"),
+  title,
+  description,
+  icons: {
+    icon: "/favicon.ico",
+  },
+  openGraph: {
+    title,
+    description,
+    images: [{ url: "/og-default.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  verification: googleSiteVerification ? { google: googleSiteVerification } : undefined,
 };
 
 export default function RootLayout({
