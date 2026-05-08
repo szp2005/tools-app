@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:comparison": "node --import tsx --test lib/comparison.test.ts",
+    "test:templates": "node --import tsx --test lib/obsidianTemplates.test.ts",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name=tools-app"
   },

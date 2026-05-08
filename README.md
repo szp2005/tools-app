@@ -8,7 +8,7 @@ Week 1 focuses on shipping the Prompt Optimizer, Cloudflare Turnstile protection
 
 - Prompt Optimizer: rewrites rough prompts into structured, model-ready instructions.
 - Comparison Builder: compares 2-5 tools from the four-site content index and exports Markdown or PDF.
-- Obsidian Template Generator: planned for Week 3.
+- Obsidian Template Generator: generates Markdown template packs for research, projects, and reading workflows.
 
 ## Getting Started
 

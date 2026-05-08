@@ -17,7 +17,8 @@ const toolCards = [
   {
     name: "Obsidian Template Generator",
     description: "Generate practical templates for notes, projects, and PKM workflows.",
-    status: "Coming Week 3",
+    status: "Available",
+    href: "/obsidian-template-generator",
   },
 ];
 
