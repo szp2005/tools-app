@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PdfOrientation } from "@/components/ComparisonPDF";
 
@@ -29,6 +30,11 @@ type ComparisonResult = {
 };
 
 const maxSelections = 5;
+
+const ComparisonPDFDocument = dynamic(() => import("./ComparisonPDF"), {
+  ssr: false,
+  loading: () => <span>Loading PDF...</span>,
+});
 
 export function ComparisonBuilder() {
   const [query, setQuery] = useState("");
@@ -171,12 +177,14 @@ export function ComparisonBuilder() {
     setError(null);
 
     try {
-      const [{ pdf }, { ComparisonPDFDocument }] = await Promise.all([
+      (ComparisonPDFDocument as typeof ComparisonPDFDocument & { preload?: () => void }).preload?.();
+
+      const [{ pdf }, { default: PDFDocument }] = await Promise.all([
         import("@react-pdf/renderer"),
-        import("@/components/ComparisonPDF"),
+        import("./ComparisonPDF"),
       ]);
       const blob = await pdf(
-        <ComparisonPDFDocument comparison={comparison} orientation={pdfOrientation} />,
+        <PDFDocument comparison={comparison} orientation={pdfOrientation} />,
       ).toBlob();
       const filename = createComparisonFilename(comparison, "pdf");
 

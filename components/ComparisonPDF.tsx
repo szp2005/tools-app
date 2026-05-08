@@ -174,3 +174,5 @@ export function ComparisonPDFDocument({ comparison, orientation }: ComparisonPDF
     </Document>
   );
 }
+
+export default ComparisonPDFDocument;
