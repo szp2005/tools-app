@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { PdfOrientation } from "@/components/ComparisonPDF";
 
 type SearchResult = {
   id: string;
@@ -34,8 +35,10 @@ export function ComparisonBuilder() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [selectedTools, setSelectedTools] = useState<SearchResult[]>([]);
   const [comparison, setComparison] = useState<ComparisonResult | null>(null);
+  const [pdfOrientation, setPdfOrientation] = useState<PdfOrientation>("landscape");
   const [isSearching, setIsSearching] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
+  const [isPdfGenerating, setIsPdfGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const searchBoxRef = useRef<HTMLDivElement | null>(null);
@@ -153,10 +156,39 @@ export function ComparisonBuilder() {
     }
 
     const markdown = createMarkdownTable(comparison);
-    const filename = `comparison-${slugify(comparison.tools[0]?.name ?? "tool")}-vs-${slugify(
-      comparison.tools[1]?.name ?? "tool",
-    )}.md`;
+    const filename = createComparisonFilename(comparison, "md");
     const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+
+    downloadBlob(blob, filename);
+  }
+
+  async function downloadPdf() {
+    if (!comparison || isPdfGenerating) {
+      return;
+    }
+
+    setIsPdfGenerating(true);
+    setError(null);
+
+    try {
+      const [{ pdf }, { ComparisonPDFDocument }] = await Promise.all([
+        import("@react-pdf/renderer"),
+        import("@/components/ComparisonPDF"),
+      ]);
+      const blob = await pdf(
+        <ComparisonPDFDocument comparison={comparison} orientation={pdfOrientation} />,
+      ).toBlob();
+      const filename = createComparisonFilename(comparison, "pdf");
+
+      downloadBlob(blob, filename);
+    } catch (pdfError) {
+      setError(pdfError instanceof Error ? pdfError.message : "PDF export failed.");
+    } finally {
+      setIsPdfGenerating(false);
+    }
+  }
+
+  function downloadBlob(blob: Blob, filename: string) {
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement("a");
 
@@ -289,14 +321,45 @@ export function ComparisonBuilder() {
                 Generated from the four-site content index. No paid API call used.
               </p>
             </div>
-            <button
-              type="button"
-              data-testid="download-markdown"
-              onClick={downloadMarkdown}
-              className="min-h-10 rounded-md border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:text-slate-950"
-            >
-              Download as Markdown
-            </button>
+            <div className="flex flex-col gap-3 sm:items-end">
+              <div className="inline-flex rounded-md border border-slate-300 bg-slate-50 p-1" aria-label="PDF layout">
+                {(["landscape", "portrait"] as const).map((orientation) => (
+                  <button
+                    key={orientation}
+                    type="button"
+                    data-testid={`pdf-orientation-${orientation}`}
+                    aria-pressed={pdfOrientation === orientation}
+                    onClick={() => setPdfOrientation(orientation)}
+                    className={`min-h-8 rounded px-3 text-xs font-semibold capitalize transition ${
+                      pdfOrientation === orientation
+                        ? "bg-slate-950 text-white"
+                        : "text-slate-600 hover:bg-white hover:text-slate-950"
+                    }`}
+                  >
+                    {orientation}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <button
+                  type="button"
+                  data-testid="download-markdown"
+                  onClick={downloadMarkdown}
+                  className="min-h-10 rounded-md border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:text-slate-950"
+                >
+                  Download as Markdown
+                </button>
+                <button
+                  type="button"
+                  data-testid="download-pdf"
+                  onClick={downloadPdf}
+                  disabled={isPdfGenerating}
+                  className="min-h-10 rounded-md bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-wait disabled:bg-slate-400"
+                >
+                  {isPdfGenerating ? "Generating PDF..." : "Download as PDF"}
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="w-full overflow-x-auto" data-testid="comparison-table-scroll">
@@ -339,6 +402,12 @@ export function ComparisonBuilder() {
       ) : null}
     </section>
   );
+}
+
+function createComparisonFilename(comparison: ComparisonResult, extension: "md" | "pdf") {
+  return `comparison-${slugify(comparison.tools[0]?.name ?? "tool")}-vs-${slugify(
+    comparison.tools[1]?.name ?? "tool",
+  )}.${extension}`;
 }
 
 function createMarkdownTable(comparison: ComparisonResult) {
