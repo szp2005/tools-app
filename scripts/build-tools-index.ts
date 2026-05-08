@@ -139,7 +139,7 @@ async function buildRecord(
     valueToString(frontmatter.description) ?? snippet ?? titleFromSlug(slug);
 
   return {
-    id: `${site.slug}:${slug}`,
+    id: buildRecordId(site.slug, slug),
     name,
     description,
     source_site: site.slug,
@@ -154,6 +154,14 @@ async function buildRecord(
     rating: extractBodyField(parsed.body, "Rating"),
     source_path: relative(filePath),
   };
+}
+
+function buildRecordId(site: SourceSite, slug: string): string {
+  return `${site}-${slug}`
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 function parseFrontmatter(raw: string): { frontmatter: Frontmatter; body: string } {
@@ -379,6 +387,15 @@ function validateRecords(records: ToolIndexRecord[]) {
       .map((record) => record.source_path)
       .join(", ");
     throw new Error(`Records missing name or description: ${examples}`);
+  }
+
+  const invalidIds = records.filter((record) => !/^[a-z0-9-]+$/.test(record.id));
+  if (invalidIds.length > 0) {
+    const examples = invalidIds
+      .slice(0, 5)
+      .map((record) => record.id)
+      .join(", ");
+    throw new Error(`Records with invalid ids: ${examples}`);
   }
 }
 

@@ -8,6 +8,7 @@
     "build:index": "tsx scripts/build-tools-index.ts",
     "start": "next start",
     "lint": "next lint",
+    "test:comparison": "node --import tsx --test lib/comparison.test.ts",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name=tools-app"
   },
