@@ -9,9 +9,10 @@ const toolCards = [
     href: "/prompt-optimizer",
   },
   {
-    name: "AI Tool Comparison",
+    name: "Comparison Builder",
     description: "Compare AI tools by use case, price, and workflow fit.",
-    status: "Coming Week 2",
+    status: "Available",
+    href: "/comparison",
   },
   {
     name: "Obsidian Template Generator",

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { PromptOptimizerForm } from "@/components/PromptOptimizerForm";
 
 export const metadata = {
@@ -9,18 +8,7 @@ export const metadata = {
 export default function PromptOptimizerPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-6 sm:px-8 lg:px-10">
-        <header className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/" className="text-sm font-semibold text-slate-700 transition hover:text-slate-950">
-            Tools App
-          </Link>
-          <nav className="flex items-center gap-4 text-sm text-slate-500">
-            <Link href="/prompt-optimizer" className="font-medium text-slate-950">
-              Prompt Optimizer
-            </Link>
-          </nav>
-        </header>
-
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10">
         <section className="max-w-3xl">
           <h1 className="text-4xl font-semibold tracking-normal text-slate-950 sm:text-5xl">
             Prompt Optimizer

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Link from "next/link";
 import { SubscribeWidget } from "@/components/SubscribeWidget";
 import "./globals.css";
 
@@ -48,6 +49,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="border-b border-slate-200 bg-white px-5 py-4 text-slate-950 sm:px-8">
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Link href="/" className="text-sm font-semibold text-slate-950 transition hover:text-violet-700">
+              Tools App
+            </Link>
+            <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
+              <Link href="/prompt-optimizer" className="transition hover:text-slate-950">
+                Prompt Optimizer
+              </Link>
+              <Link href="/comparison" className="transition hover:text-slate-950">
+                Comparison
+              </Link>
+            </nav>
+          </div>
+        </header>
         {children}
         <footer className="border-t border-slate-200 bg-white px-5 py-8 text-slate-950 sm:px-8">
           <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
@@ -56,6 +72,14 @@ export default function RootLayout({
               <p className="mt-2 max-w-sm text-sm leading-6 text-slate-600">
                 Free AI tools and a weekly digest for sharper creator workflows.
               </p>
+              <nav className="mt-4 flex flex-wrap gap-4 text-sm font-medium text-slate-600">
+                <Link href="/prompt-optimizer" className="transition hover:text-slate-950">
+                  Prompt Optimizer
+                </Link>
+                <Link href="/comparison" className="transition hover:text-slate-950">
+                  Comparison
+                </Link>
+              </nav>
             </div>
             <SubscribeWidget variant="footer" source="footer" />
           </div>
