@@ -14,6 +14,11 @@ export type TemplatePackOptions = {
   detailLevel: "lean" | "guided";
 };
 
+export type ObsidianTemplateFile = {
+  filename: string;
+  body: string;
+};
+
 export const obsidianScenarios: ObsidianScenario[] = [
   {
     id: "academic",
@@ -46,7 +51,7 @@ export function buildObsidianTemplatePack(options: TemplatePackOptions) {
   const scenario = getObsidianScenario(options.scenarioId);
   const vaultName = sanitizeVaultName(options.vaultName);
   const detailLevel = options.detailLevel;
-  const sections = buildScenarioSections(scenario.id, vaultName, detailLevel);
+  const sections = buildObsidianTemplateFiles(options);
 
   return [
     `# ${scenario.name} template pack`,
@@ -73,11 +78,19 @@ export function createTemplateFilename(options: TemplatePackOptions) {
   )}-template-pack.md`;
 }
 
+export function buildObsidianTemplateFiles(options: TemplatePackOptions): ObsidianTemplateFile[] {
+  return buildScenarioSections(
+    options.scenarioId,
+    sanitizeVaultName(options.vaultName),
+    options.detailLevel,
+  );
+}
+
 function buildScenarioSections(
   scenarioId: ObsidianScenarioId,
   vaultName: string,
   detailLevel: "lean" | "guided",
-) {
+): ObsidianTemplateFile[] {
   const guided = detailLevel === "guided";
 
   if (scenarioId === "academic") {

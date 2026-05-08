@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  buildObsidianTemplateFiles,
   buildObsidianTemplatePack,
   createTemplateFilename,
   obsidianScenarios,
@@ -33,5 +34,20 @@ describe("obsidian template pack", () => {
       }),
       "reading-notes-creator-notes-template-pack.md",
     );
+  });
+
+  it("returns single-file exports for a project pack", () => {
+    const files = buildObsidianTemplateFiles({
+      scenarioId: "project",
+      vaultName: "Ops",
+      detailLevel: "lean",
+    });
+
+    assert.deepEqual(files.map((file) => file.filename), [
+      "project-dashboard.md",
+      "decision-log.md",
+      "weekly-review.md",
+    ]);
+    assert.match(files[0].body, /# Ops project dashboard/);
   });
 });

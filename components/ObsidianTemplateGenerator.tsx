@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
+  buildObsidianTemplateFiles,
   buildObsidianTemplatePack,
   createTemplateFilename,
   obsidianScenarios,
@@ -14,11 +15,12 @@ export function ObsidianTemplateGenerator() {
   const [detailLevel, setDetailLevel] = useState<"lean" | "guided">("guided");
   const [copied, setCopied] = useState(false);
 
-  const selectedScenario =
-    obsidianScenarios.find((scenario) => scenario.id === scenarioId) ?? obsidianScenarios[0];
-
   const pack = useMemo(
     () => buildObsidianTemplatePack({ scenarioId, vaultName, detailLevel }),
+    [detailLevel, scenarioId, vaultName],
+  );
+  const templateFiles = useMemo(
+    () => buildObsidianTemplateFiles({ scenarioId, vaultName, detailLevel }),
     [detailLevel, scenarioId, vaultName],
   );
 
@@ -29,6 +31,19 @@ export function ObsidianTemplateGenerator() {
 
     anchor.href = url;
     anchor.download = createTemplateFilename({ scenarioId, vaultName, detailLevel });
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.URL.revokeObjectURL(url);
+  }
+
+  function downloadSingleFile(filename: string, body: string) {
+    const blob = new Blob([body], { type: "text/markdown;charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = filename;
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
@@ -125,10 +140,16 @@ export function ObsidianTemplateGenerator() {
           <div className="mt-6 rounded-md bg-slate-50 p-4">
             <p className="text-sm font-semibold text-slate-950">Files included</p>
             <ul className="mt-3 grid gap-2 text-sm text-slate-600">
-              {selectedScenario.files.map((file) => (
-                <li key={file} className="flex items-center justify-between gap-3">
-                  <span>{file}</span>
-                  <span className="rounded bg-white px-2 py-1 text-xs font-semibold text-slate-500">.md</span>
+              {templateFiles.map((file) => (
+                <li key={file.filename} className="flex items-center justify-between gap-3">
+                  <span>{file.filename}</span>
+                  <button
+                    type="button"
+                    onClick={() => downloadSingleFile(file.filename, file.body)}
+                    className="rounded bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:text-slate-950"
+                  >
+                    Download
+                  </button>
                 </li>
               ))}
             </ul>
