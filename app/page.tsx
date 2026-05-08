@@ -40,13 +40,14 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl">
           <div className="grid gap-4 md:grid-cols-3">
             {toolCards.map((tool) => {
+              const isAvailable = tool.status === "Live" || tool.status === "Available";
               const cardContent = (
                 <>
                   <div className="flex items-start justify-between gap-4">
                     <h2 className="text-lg font-semibold text-slate-950">{tool.name}</h2>
                     <span
                       className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
-                        tool.href
+                        isAvailable
                           ? "bg-emerald-100 text-emerald-800"
                           : "bg-slate-200 text-slate-600"
                       }`}
