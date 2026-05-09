@@ -30,6 +30,9 @@ jobs:
       - name: Run price tracker tests
         run: npm run test:price-tracker
 
+      - name: Run health tests
+        run: npm run test:health
+
       - name: Run template tests
         run: npm run test:templates
 

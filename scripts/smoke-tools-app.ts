@@ -27,6 +27,19 @@ const checks: SmokeCheck[] = [
     },
   },
   {
+    name: "health endpoint",
+    run: async () => {
+      const response = await request("GET", "/health.json");
+      assertStatus(response, 200);
+      assertContentType(response, "application/json");
+      const data = parseJson(response.body);
+      if (data.status !== "ok" || data.tools?.length !== 4 || data.indexes?.price_tracker?.total < 200) {
+        throw new Error("unexpected health payload");
+      }
+      return `HTTP 200 + ${data.tools.length} tools + ${data.indexes.price_tracker.total} price signals`;
+    },
+  },
+  {
     name: "prompt optimizer page",
     run: async () => {
       const response = await request("GET", "/prompt-optimizer");

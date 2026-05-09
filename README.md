@@ -10,6 +10,7 @@ Current focus: free workflow tools that reuse the four-site content portfolio, c
 - [Comparison Builder](https://tools.toolrouteai.com/comparison): compares 2-5 tools from the four-site content index and exports Markdown or PDF. No LLM API call is used.
 - [Obsidian Template Generator](https://tools.toolrouteai.com/obsidian-template-generator): generates Markdown template packs for research, projects, and reading workflows entirely in the browser.
 - [Price Tracker](https://tools.toolrouteai.com/price-tracker): searches indexed AI tool price signals from article metadata, with filtered CSV export, RSS, and a machine-readable JSON index. This is an MVP metadata tracker, not a live price crawler. RSS: [price-tracker/feed.xml](https://tools.toolrouteai.com/price-tracker/feed.xml), JSON: [price-tracker/index.json](https://tools.toolrouteai.com/price-tracker/index.json)
+- [Health JSON](https://tools.toolrouteai.com/health.json): machine-readable status summary for tools, content indexes, SEO pages, and feeds.
 
 Comparison index pages:
 
@@ -72,6 +73,7 @@ npm run dev
 npm run build
 npm run lint
 npm run test:comparison
+npm run test:health
 npm run test:price-tracker
 npm run test:templates
 npm run smoke:prod

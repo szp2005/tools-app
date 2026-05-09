@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:comparison": "node --import tsx --test lib/comparison.test.ts",
+    "test:health": "node --import tsx --test lib/siteHealth.test.ts",
     "test:price-tracker": "node --import tsx --test lib/priceTracker.test.ts",
     "test:templates": "node --import tsx --test lib/obsidianTemplates.test.ts",
     "pages:build": "npx @cloudflare/next-on-pages",
