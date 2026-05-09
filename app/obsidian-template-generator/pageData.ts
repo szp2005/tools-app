@@ -10,6 +10,10 @@ export const obsidianScenarioPages: Record<
     heading: string;
     description: string;
     url: string;
+    faq: Array<{
+      question: string;
+      answer: string;
+    }>;
   }
 > = {
   academic: {
@@ -18,6 +22,18 @@ export const obsidianScenarioPages: Record<
     description:
       "Download Obsidian Markdown templates for literature notes, source triage, research dashboards, and synthesis workflows.",
     url: `${obsidianTemplatePageUrl}/academic`,
+    faq: [
+      {
+        question: "What is included in the academic research pack?",
+        answer:
+          "The pack includes a research dashboard, literature note, and synthesis note for turning sources into clearer arguments.",
+      },
+      {
+        question: "Can I use these templates without an Obsidian plugin?",
+        answer:
+          "Yes. Each file is plain Markdown, so you can paste it into Obsidian, Logseq, VS Code, or any notes app that supports Markdown.",
+      },
+    ],
   },
   project: {
     title: "Project Management Obsidian Templates | Tools App",
@@ -25,6 +41,18 @@ export const obsidianScenarioPages: Record<
     description:
       "Download Obsidian Markdown templates for project dashboards, decision logs, weekly reviews, and operator workflows.",
     url: `${obsidianTemplatePageUrl}/project`,
+    faq: [
+      {
+        question: "What is included in the project management pack?",
+        answer:
+          "The pack includes a project dashboard, decision log, and weekly review template for running an operating rhythm from Markdown.",
+      },
+      {
+        question: "Who is this pack best for?",
+        answer:
+          "It is built for founders, consultants, operators, and solo builders who want a lightweight project system inside Obsidian.",
+      },
+    ],
   },
   reading: {
     title: "Reading Notes Obsidian Templates | Tools App",
@@ -32,6 +60,18 @@ export const obsidianScenarioPages: Record<
     description:
       "Download Obsidian Markdown templates for book notes, article capture, idea distillation, and creator research workflows.",
     url: `${obsidianTemplatePageUrl}/reading`,
+    faq: [
+      {
+        question: "What is included in the reading notes pack?",
+        answer:
+          "The pack includes a reading dashboard, book note, and idea distillation template for turning highlights into reusable ideas.",
+      },
+      {
+        question: "Can newsletter writers use this pack?",
+        answer:
+          "Yes. The reading workflow is designed to help creators capture sources, extract ideas, and turn notes into future writing.",
+      },
+    ],
   },
 };
 
