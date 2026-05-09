@@ -1,6 +1,7 @@
 import { ObsidianTemplateGenerator } from "@/components/ObsidianTemplateGenerator";
 import type { Metadata } from "next";
 import { buildGuidesByScenario, obsidianTemplatePageUrl } from "./pageData";
+import { ScenarioLinkRail } from "./ScenarioLinkRail";
 
 const pageTitle = "Free Obsidian Template Generator | Tools App";
 const pageDescription =
@@ -53,6 +54,8 @@ export default function ObsidianTemplateGeneratorPage() {
             Pick a workflow and download a clean Markdown template pack for your vault.
           </p>
         </section>
+
+        <ScenarioLinkRail />
 
         <ObsidianTemplateGenerator guidesByScenario={buildGuidesByScenario()} />
       </div>

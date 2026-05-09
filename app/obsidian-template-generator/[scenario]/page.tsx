@@ -6,6 +6,7 @@ import {
   isObsidianScenarioId,
   obsidianScenarioPages,
 } from "../pageData";
+import { ScenarioLinkRail } from "../ScenarioLinkRail";
 
 type ScenarioPageProps = {
   params: {
@@ -65,6 +66,8 @@ export default function ObsidianTemplateScenarioPage({ params }: ScenarioPagePro
             {page.description}
           </p>
         </section>
+
+        <ScenarioLinkRail activeScenarioId={params.scenario} />
 
         <ObsidianTemplateGenerator
           guidesByScenario={buildGuidesByScenario()}
