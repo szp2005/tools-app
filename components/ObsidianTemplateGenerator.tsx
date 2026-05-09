@@ -42,6 +42,11 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
   const relatedGuides = guidesByScenario[scenarioId] ?? [];
 
   useEffect(() => {
+    const requestedScenario = new URLSearchParams(window.location.search).get("scenario");
+    if (isObsidianScenarioId(requestedScenario)) {
+      setScenarioId(requestedScenario);
+    }
+
     const storedCount = Number.parseInt(window.localStorage.getItem(downloadCountKey) ?? "0", 10);
     setDownloadCount(Number.isFinite(storedCount) ? storedCount : 0);
   }, []);
@@ -255,4 +260,8 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
       </div>
     </section>
   );
+}
+
+function isObsidianScenarioId(value: string | null): value is ObsidianScenarioId {
+  return obsidianScenarios.some((scenario) => scenario.id === value);
 }
