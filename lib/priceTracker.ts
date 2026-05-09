@@ -31,6 +31,9 @@ export type PriceTrackerStats = {
   sources: number;
 };
 
+const siteUrl = "https://tools.toolrouteai.com";
+const priceTrackerUrl = `${siteUrl}/price-tracker`;
+
 export function getPriceTrackerRecords(limit = 240): PriceTrackerRecord[] {
   return (toolsIndex as ToolIndexRecord[])
     .filter((record) => typeof record.price === "string" && record.price.trim().length > 0)
@@ -97,4 +100,76 @@ export function classifyPrice(price: string): PriceKind {
   }
 
   return "Variable";
+}
+
+export function buildPriceTrackerFeedXml(records = getPriceTrackerRecords(60)): string {
+  const latestDate = getLatestPubDate(records);
+
+  const items = records
+    .map((record) =>
+      [
+        "    <item>",
+        `      <title>${escapeXml(record.name)}</title>`,
+        `      <link>${escapeXml(record.source_url)}</link>`,
+        `      <guid isPermaLink="false">${escapeXml(`tools-price:${record.id}:${record.price}`)}</guid>`,
+        `      <pubDate>${formatRssDate(record.pubDate)}</pubDate>`,
+        `      <category>${escapeXml(record.price_kind)}</category>`,
+        `      <description>${escapeXml(
+          `Price signal: ${record.price}. Source: ${record.source_site}. ${record.description}`,
+        )}</description>`,
+        "    </item>",
+      ].join("\n"),
+    )
+    .join("\n");
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0">',
+    "  <channel>",
+    "    <title>AI Tool Price Tracker</title>",
+    `    <link>${priceTrackerUrl}</link>`,
+    "    <description>Indexed AI tool price signals from the Tools App content portfolio.</description>",
+    "    <language>en</language>",
+    `    <lastBuildDate>${formatRssDate(latestDate)}</lastBuildDate>`,
+    items,
+    "  </channel>",
+    "</rss>",
+  ].join("\n");
+}
+
+function getLatestPubDate(records: PriceTrackerRecord[]): string | undefined {
+  return records
+    .map((record) => record.pubDate)
+    .filter((date): date is string => Boolean(date))
+    .sort()
+    .at(-1);
+}
+
+function formatRssDate(value: string | undefined): string {
+  const date = value ? new Date(value) : new Date();
+
+  if (Number.isNaN(date.getTime())) {
+    return new Date().toUTCString();
+  }
+
+  return date.toUTCString();
+}
+
+function escapeXml(value: string): string {
+  return value.replace(/[<>&'"]/g, (character) => {
+    switch (character) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+      default:
+        return character;
+    }
+  });
 }

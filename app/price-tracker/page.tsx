@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: pageUrl,
+    types: {
+      "application/rss+xml": `${pageUrl}/feed.xml`,
+    },
   },
   openGraph: {
     title: pageTitle,
@@ -52,6 +55,12 @@ export default function PriceTrackerPage() {
               Search price signals pulled from the four-site content index. This is a lightweight
               metadata tracker, not a live crawler, so always verify pricing on the vendor page.
             </p>
+            <a
+              href="/price-tracker/feed.xml"
+              className="mt-5 inline-flex min-h-10 items-center rounded-md border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:text-slate-950"
+            >
+              RSS feed
+            </a>
           </div>
 
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
