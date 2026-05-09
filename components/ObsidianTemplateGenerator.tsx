@@ -22,10 +22,14 @@ export type RelatedObsidianGuide = {
 
 type ObsidianTemplateGeneratorProps = {
   guidesByScenario: Record<ObsidianScenarioId, RelatedObsidianGuide[]>;
+  initialScenarioId?: ObsidianScenarioId;
 };
 
-export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplateGeneratorProps) {
-  const [scenarioId, setScenarioId] = useState<ObsidianScenarioId>("project");
+export function ObsidianTemplateGenerator({
+  guidesByScenario,
+  initialScenarioId = "project",
+}: ObsidianTemplateGeneratorProps) {
+  const [scenarioId, setScenarioId] = useState<ObsidianScenarioId>(initialScenarioId);
   const [vaultName, setVaultName] = useState("Solo OS");
   const [detailLevel, setDetailLevel] = useState<"lean" | "guided">("guided");
   const [copied, setCopied] = useState(false);
@@ -45,11 +49,13 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
     const requestedScenario = new URLSearchParams(window.location.search).get("scenario");
     if (isObsidianScenarioId(requestedScenario)) {
       setScenarioId(requestedScenario);
+    } else {
+      setScenarioId(initialScenarioId);
     }
 
     const storedCount = Number.parseInt(window.localStorage.getItem(downloadCountKey) ?? "0", 10);
     setDownloadCount(Number.isFinite(storedCount) ? storedCount : 0);
-  }, []);
+  }, [initialScenarioId]);
 
   function recordDownload() {
     setDownloadCount((currentCount) => {

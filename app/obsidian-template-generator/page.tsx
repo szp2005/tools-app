@@ -1,12 +1,10 @@
 import { ObsidianTemplateGenerator } from "@/components/ObsidianTemplateGenerator";
-import obsidianIndex from "@/data/obsidian-index.json";
 import type { Metadata } from "next";
-import type { ObsidianScenarioId } from "@/lib/obsidianTemplates";
+import { buildGuidesByScenario, obsidianTemplatePageUrl } from "./pageData";
 
 const pageTitle = "Free Obsidian Template Generator | Tools App";
 const pageDescription =
   "Generate practical Obsidian Markdown template packs for research, projects, reading notes, and PKM workflows.";
-const pageUrl = "https://tools.toolrouteai.com/obsidian-template-generator";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -19,12 +17,12 @@ export const metadata: Metadata = {
     "knowledge management workflow",
   ],
   alternates: {
-    canonical: pageUrl,
+    canonical: obsidianTemplatePageUrl,
   },
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    url: pageUrl,
+    url: obsidianTemplatePageUrl,
     siteName: "Tools App",
     images: [{ url: "/og-default.png", width: 1200, height: 630 }],
     type: "website",
@@ -62,42 +60,6 @@ export default function ObsidianTemplateGeneratorPage() {
   );
 }
 
-type ObsidianIndexRecord = {
-  id: string;
-  title: string;
-  description: string;
-  source_site: string;
-  source_url: string;
-  scenarios: ObsidianScenarioId[];
-  pubDate?: string;
-};
-
-function buildGuidesByScenario() {
-  const scenarios: ObsidianScenarioId[] = ["academic", "project", "reading"];
-
-  return Object.fromEntries(
-    scenarios.map((scenario) => [
-      scenario,
-      (obsidianIndex as ObsidianIndexRecord[])
-        .filter((record) => record.scenarios.includes(scenario))
-        .sort((a, b) => {
-          const primaryOrder = Number(b.scenarios[0] === scenario) - Number(a.scenarios[0] === scenario);
-          if (primaryOrder !== 0) return primaryOrder;
-
-          return (b.pubDate ?? "").localeCompare(a.pubDate ?? "");
-        })
-        .slice(0, 4)
-        .map(({ id, title, description, source_site, source_url }) => ({
-          id,
-          title,
-          description,
-          source_site,
-          source_url,
-        })),
-    ]),
-  ) as Record<ObsidianScenarioId, Array<Pick<ObsidianIndexRecord, "id" | "title" | "description" | "source_site" | "source_url">>>;
-}
-
 function buildStructuredData() {
   return {
     "@context": "https://schema.org",
@@ -105,7 +67,7 @@ function buildStructuredData() {
       {
         "@type": "WebApplication",
         name: "Obsidian Template Generator",
-        url: pageUrl,
+        url: obsidianTemplatePageUrl,
         applicationCategory: "ProductivityApplication",
         operatingSystem: "Web",
         description: pageDescription,
@@ -128,7 +90,7 @@ function buildStructuredData() {
             "@type": "ListItem",
             position: 2,
             name: "Obsidian Template Generator",
-            item: pageUrl,
+            item: obsidianTemplatePageUrl,
           },
         ],
       },
