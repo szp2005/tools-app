@@ -7,6 +7,7 @@
     "build": "next build",
     "build:index": "tsx scripts/build-tools-index.ts",
     "build:obsidian-index": "tsx scripts/build-obsidian-index.ts",
+    "smoke:prod": "tsx scripts/smoke-tools-app.ts",
     "start": "next start",
     "lint": "next lint",
     "test:comparison": "node --import tsx --test lib/comparison.test.ts",

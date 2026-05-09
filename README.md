@@ -59,8 +59,15 @@ npm run lint
 npm run test:comparison
 npm run test:price-tracker
 npm run test:templates
+npm run smoke:prod
 npm run pages:build
 npm run pages:deploy
+```
+
+If the local DNS resolver maps `tools.toolrouteai.com` to a private testing address, pin a Cloudflare edge IP for the smoke run:
+
+```bash
+SMOKE_RESOLVE_IP=104.21.50.114 npm run smoke:prod
 ```
 
 ## Cloudflare Pages
