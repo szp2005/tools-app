@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { SubscribeWidget } from "@/components/SubscribeWidget";
 import {
   buildObsidianTemplateFiles,
   buildObsidianTemplatePack,
@@ -8,6 +9,8 @@ import {
   obsidianScenarios,
   type ObsidianScenarioId,
 } from "@/lib/obsidianTemplates";
+
+const downloadCountKey = "obsidian_template_downloads";
 
 export type RelatedObsidianGuide = {
   id: string;
@@ -26,6 +29,7 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
   const [vaultName, setVaultName] = useState("Solo OS");
   const [detailLevel, setDetailLevel] = useState<"lean" | "guided">("guided");
   const [copied, setCopied] = useState(false);
+  const [downloadCount, setDownloadCount] = useState(0);
 
   const pack = useMemo(
     () => buildObsidianTemplatePack({ scenarioId, vaultName, detailLevel }),
@@ -36,6 +40,19 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
     [detailLevel, scenarioId, vaultName],
   );
   const relatedGuides = guidesByScenario[scenarioId] ?? [];
+
+  useEffect(() => {
+    const storedCount = Number.parseInt(window.localStorage.getItem(downloadCountKey) ?? "0", 10);
+    setDownloadCount(Number.isFinite(storedCount) ? storedCount : 0);
+  }, []);
+
+  function recordDownload() {
+    setDownloadCount((currentCount) => {
+      const nextCount = currentCount + 1;
+      window.localStorage.setItem(downloadCountKey, String(nextCount));
+      return nextCount;
+    });
+  }
 
   function downloadPack() {
     const blob = new Blob([pack], { type: "text/markdown;charset=utf-8" });
@@ -48,6 +65,7 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
     anchor.click();
     anchor.remove();
     window.URL.revokeObjectURL(url);
+    recordDownload();
   }
 
   function downloadSingleFile(filename: string, body: string) {
@@ -61,6 +79,7 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
     anchor.click();
     anchor.remove();
     window.URL.revokeObjectURL(url);
+    recordDownload();
   }
 
   async function copyPack() {
@@ -227,6 +246,12 @@ export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplate
           className="min-h-[620px] w-full resize-y border-0 bg-slate-950 p-5 font-mono text-xs leading-6 text-slate-100 outline-none sm:p-6"
           aria-label="Generated Obsidian template pack"
         />
+
+        {downloadCount >= 2 ? (
+          <div className="border-t border-slate-200 bg-slate-50 p-5 sm:p-6">
+            <SubscribeWidget variant="inline" source="tool" />
+          </div>
+        ) : null}
       </div>
     </section>
   );
