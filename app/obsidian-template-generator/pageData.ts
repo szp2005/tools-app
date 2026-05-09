@@ -10,6 +10,7 @@ export const obsidianScenarioPages: Record<
     heading: string;
     description: string;
     url: string;
+    image: string;
     faq: Array<{
       question: string;
       answer: string;
@@ -22,6 +23,7 @@ export const obsidianScenarioPages: Record<
     description:
       "Download Obsidian Markdown templates for literature notes, source triage, research dashboards, and synthesis workflows.",
     url: `${obsidianTemplatePageUrl}/academic`,
+    image: "/og-obsidian-academic.png",
     faq: [
       {
         question: "What is included in the academic research pack?",
@@ -41,6 +43,7 @@ export const obsidianScenarioPages: Record<
     description:
       "Download Obsidian Markdown templates for project dashboards, decision logs, weekly reviews, and operator workflows.",
     url: `${obsidianTemplatePageUrl}/project`,
+    image: "/og-obsidian-project.png",
     faq: [
       {
         question: "What is included in the project management pack?",
@@ -60,6 +63,7 @@ export const obsidianScenarioPages: Record<
     description:
       "Download Obsidian Markdown templates for book notes, article capture, idea distillation, and creator research workflows.",
     url: `${obsidianTemplatePageUrl}/reading`,
+    image: "/og-obsidian-reading.png",
     faq: [
       {
         question: "What is included in the reading notes pack?",

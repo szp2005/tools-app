@@ -38,14 +38,14 @@ export function generateMetadata({ params }: ScenarioPageProps): Metadata {
       description: page.description,
       url: page.url,
       siteName: "Tools App",
-      images: [{ url: "/og-default.png", width: 1200, height: 630 }],
+      images: [{ url: page.image, width: 1200, height: 630 }],
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: page.title,
       description: page.description,
-      images: ["/og-default.png"],
+      images: [page.image],
     },
   };
 }
@@ -121,6 +121,7 @@ export default function ObsidianTemplateScenarioPage({ params }: ScenarioPagePro
 function buildScenarioStructuredData(scenarioId: ObsidianScenarioId) {
   const page = obsidianScenarioPages[scenarioId];
   const scenario = getObsidianScenario(scenarioId);
+  const imageUrl = new URL(page.image, "https://tools.toolrouteai.com").toString();
 
   return {
     "@context": "https://schema.org",
@@ -138,6 +139,12 @@ function buildScenarioStructuredData(scenarioId: ObsidianScenarioId) {
         about: {
           "@type": "Thing",
           name: scenario.name,
+        },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: imageUrl,
+          width: 1200,
+          height: 630,
         },
       },
       {
