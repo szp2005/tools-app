@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildComparison, searchTools, validateComparisonIds } from "./comparison";
+import { buildStaticComparisonPage, comparisonPages, getComparisonPage } from "./comparisonPages";
 
 describe("comparison search", () => {
   it("returns at least five AI writing matches", () => {
@@ -36,5 +37,22 @@ describe("comparison build", () => {
       () => validateComparisonIds(["ai-tools-pro-safe-id", "../package.json"]),
       /lowercase letters/,
     );
+  });
+
+  it("builds static comparison SEO pages", () => {
+    assert.equal(comparisonPages.length, 4);
+    assert.ok(getComparisonPage("midjourney-vs-dall-e-3"));
+    assert.equal(getComparisonPage("missing-pair"), undefined);
+
+    for (const page of comparisonPages) {
+      const comparison = buildStaticComparisonPage(page);
+
+      assert.equal(comparison.tools.length, 2);
+      assert.ok(comparison.matrix.length >= 5);
+      assert.deepEqual(
+        comparison.tools.map((tool) => tool.id),
+        page.ids,
+      );
+    }
   });
 });

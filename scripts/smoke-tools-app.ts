@@ -45,6 +45,18 @@ const checks: SmokeCheck[] = [
     },
   },
   {
+    name: "comparison segment pages",
+    run: async () => {
+      const midjourney = await request("GET", "/comparison/midjourney-vs-dall-e-3");
+      const notion = await request("GET", "/comparison/notion-vs-obsidian");
+      assertStatus(midjourney, 200);
+      assertStatus(notion, 200);
+      assertContains(midjourney.body, ["Midjourney vs DALL-E 3 Comparison", "Open Comparison Builder"]);
+      assertContains(notion.body, ["Notion vs Obsidian Comparison", "Open Comparison Builder"]);
+      return "midjourney + notion pages healthy";
+    },
+  },
+  {
     name: "obsidian template page",
     run: async () => {
       const response = await request("GET", "/obsidian-template-generator");
