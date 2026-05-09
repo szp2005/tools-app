@@ -31,6 +31,16 @@ export type PriceTrackerStats = {
   sources: number;
 };
 
+export type PriceTrackerIndexPayload = {
+  schema_version: "1";
+  generated_at: string;
+  source: string;
+  count: number;
+  latest_pub_date?: string;
+  stats: PriceTrackerStats;
+  records: PriceTrackerRecord[];
+};
+
 const siteUrl = "https://tools.toolrouteai.com";
 const priceTrackerUrl = `${siteUrl}/price-tracker`;
 
@@ -103,7 +113,7 @@ export function classifyPrice(price: string): PriceKind {
 }
 
 export function buildPriceTrackerFeedXml(records = getPriceTrackerRecords(60)): string {
-  const latestDate = getLatestPubDate(records);
+  const latestDate = getLatestPriceTrackerPubDate(records);
 
   const items = records
     .map((record) =>
@@ -137,7 +147,22 @@ export function buildPriceTrackerFeedXml(records = getPriceTrackerRecords(60)): 
   ].join("\n");
 }
 
-function getLatestPubDate(records: PriceTrackerRecord[]): string | undefined {
+export function buildPriceTrackerIndexPayload(
+  records = getPriceTrackerRecords(),
+  generatedAt = new Date(),
+): PriceTrackerIndexPayload {
+  return {
+    schema_version: "1",
+    generated_at: generatedAt.toISOString(),
+    source: priceTrackerUrl,
+    count: records.length,
+    latest_pub_date: getLatestPriceTrackerPubDate(records),
+    stats: getPriceTrackerStats(records),
+    records,
+  };
+}
+
+export function getLatestPriceTrackerPubDate(records: PriceTrackerRecord[]): string | undefined {
   return records
     .map((record) => record.pubDate)
     .filter((date): date is string => Boolean(date))

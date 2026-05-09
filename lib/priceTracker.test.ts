@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   buildPriceTrackerFeedXml,
+  buildPriceTrackerIndexPayload,
   classifyPrice,
+  getLatestPriceTrackerPubDate,
   getPriceTrackerRecords,
   getPriceTrackerStats,
 } from "@/lib/priceTracker";
@@ -36,6 +38,22 @@ describe("price tracker index", () => {
     assert.match(feed, /<title>AI Tool Price Tracker<\/title>/);
     assert.match(feed, /tools-price:/);
     assert.match(feed, /Price signal:/);
+  });
+
+  it("builds a machine-readable JSON payload for price signals", () => {
+    const records = getPriceTrackerRecords(4);
+    const generatedAt = new Date("2026-05-09T00:00:00Z");
+    const payload = buildPriceTrackerIndexPayload(records, generatedAt);
+
+    assert.equal(payload.schema_version, "1");
+    assert.equal(payload.generated_at, "2026-05-09T00:00:00.000Z");
+    assert.equal(payload.source, "https://tools.toolrouteai.com/price-tracker");
+    assert.equal(payload.count, 4);
+    assert.equal(payload.records.length, 4);
+    assert.equal(payload.stats.total, 4);
+    assert.ok(payload.latest_pub_date);
+    assert.deepEqual(payload.latest_pub_date, getLatestPriceTrackerPubDate(records));
+    assert.ok(payload.records.every((record) => record.id && record.price && record.price_kind));
   });
 
   it("builds a CSV export for price signals", () => {
