@@ -10,6 +10,11 @@ import {
 } from "@/lib/priceTracker";
 import type { PriceTrackerRecord } from "@/lib/priceTracker";
 import { buildPriceTrackerCsv, createPriceTrackerCsvFilename } from "@/lib/priceTrackerCsv";
+import {
+  getPriceTrackerSegment,
+  getPriceTrackerSegmentRecords,
+  priceTrackerSegments,
+} from "@/lib/priceTrackerSegments";
 
 describe("price tracker index", () => {
   it("extracts priced records from all source sites", () => {
@@ -83,5 +88,23 @@ describe("price tracker index", () => {
     assert.match(csv, /"\$0,\$10"/);
     assert.match(csv, /,'=formula; pricing,/);
     assert.match(csv, /"He said ""ship it"", then added a newline\nfor import testing\."/);
+  });
+
+  it("builds price tracker SEO segment pages from real records", () => {
+    const records = getPriceTrackerRecords();
+
+    assert.equal(priceTrackerSegments.length, 5);
+    assert.ok(getPriceTrackerSegment("free-ai-tools"));
+    assert.equal(getPriceTrackerSegment("missing-segment"), undefined);
+
+    for (const segment of priceTrackerSegments) {
+      const segmentRecords = getPriceTrackerSegmentRecords(records, segment);
+
+      assert.ok(segmentRecords.length > 0, `${segment.slug} should have records`);
+      assert.ok(
+        segmentRecords.every((record) => segment.priceKinds.includes(record.price_kind)),
+        `${segment.slug} should only include matching price kinds`,
+      );
+    }
   });
 });

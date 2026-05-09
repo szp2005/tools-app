@@ -63,6 +63,18 @@ const checks: SmokeCheck[] = [
     },
   },
   {
+    name: "price tracker segment pages",
+    run: async () => {
+      const free = await request("GET", "/price-tracker/free-ai-tools");
+      const subscription = await request("GET", "/price-tracker/subscription-ai-tools");
+      assertStatus(free, 200);
+      assertStatus(subscription, 200);
+      assertContains(free.body, ["Free AI Tools Price Signals", "Download CSV"]);
+      assertContains(subscription.body, ["Subscription AI Tools Price Signals", "Download CSV"]);
+      return "free + subscription segment pages healthy";
+    },
+  },
+  {
     name: "price tracker RSS",
     run: async () => {
       const response = await request("GET", "/price-tracker/feed.xml");

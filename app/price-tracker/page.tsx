@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PriceTrackerTable } from "@/components/PriceTrackerTable";
 import { getPriceTrackerRecords, getPriceTrackerStats } from "@/lib/priceTracker";
+import { getPriceTrackerSegmentRecords, priceTrackerSegments } from "@/lib/priceTrackerSegments";
 
 const pageUrl = "https://tools.toolrouteai.com/price-tracker";
 const pageTitle = "AI Tool Price Tracker | Tools App";
@@ -92,6 +93,32 @@ export default function PriceTrackerPage() {
                 <dd className="mt-1 text-2xl font-semibold text-slate-950">{stats.monthly}</dd>
               </div>
             </dl>
+          </div>
+        </section>
+
+        <section className="grid gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-950">Browse by pricing model</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-600">
+              Use these index pages when you want a focused list of free, subscription, one-time,
+              usage-based, or enterprise pricing signals.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {priceTrackerSegments.map((segment) => {
+              const count = getPriceTrackerSegmentRecords(records, segment).length;
+
+              return (
+                <a
+                  key={segment.slug}
+                  href={`/price-tracker/${segment.slug}`}
+                  className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 transition hover:border-slate-950 hover:bg-white"
+                >
+                  <span className="block text-sm font-semibold text-slate-950">{segment.heading}</span>
+                  <span className="mt-1 block text-xs font-medium text-slate-500">{count} signals</span>
+                </a>
+              );
+            })}
           </div>
         </section>
 

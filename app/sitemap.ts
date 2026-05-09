@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { priceTrackerSegments } from "@/lib/priceTrackerSegments";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://tools.toolrouteai.com";
@@ -47,5 +48,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    ...priceTrackerSegments.map((segment) => ({
+      url: `${base}/price-tracker/${segment.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.65,
+    })),
   ];
 }
