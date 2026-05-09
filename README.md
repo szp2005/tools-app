@@ -9,7 +9,7 @@ Current focus: free workflow tools that reuse the four-site content portfolio, c
 - [Prompt Optimizer](https://tools.toolrouteai.com/prompt-optimizer): rewrites rough prompts into structured, model-ready instructions. Protected by Turnstile and KV-backed daily rate limits.
 - [Comparison Builder](https://tools.toolrouteai.com/comparison): compares 2-5 tools from the four-site content index and exports Markdown or PDF. No LLM API call is used.
 - [Obsidian Template Generator](https://tools.toolrouteai.com/obsidian-template-generator): generates Markdown template packs for research, projects, and reading workflows entirely in the browser.
-- [Price Tracker](https://tools.toolrouteai.com/price-tracker): searches indexed AI tool price signals from article metadata. This is an MVP metadata tracker, not a live price crawler. RSS: [price-tracker/feed.xml](https://tools.toolrouteai.com/price-tracker/feed.xml)
+- [Price Tracker](https://tools.toolrouteai.com/price-tracker): searches indexed AI tool price signals from article metadata, with filtered CSV export and RSS. This is an MVP metadata tracker, not a live price crawler. RSS: [price-tracker/feed.xml](https://tools.toolrouteai.com/price-tracker/feed.xml)
 
 ## Obsidian Template Packs
 

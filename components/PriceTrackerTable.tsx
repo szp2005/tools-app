@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { PriceKind, PriceTrackerRecord } from "@/lib/priceTracker";
+import { buildPriceTrackerCsv, createPriceTrackerCsvFilename } from "@/lib/priceTrackerCsv";
 
 type PriceTrackerTableProps = {
   records: PriceTrackerRecord[];
@@ -51,6 +52,18 @@ export function PriceTrackerTable({ records }: PriceTrackerTableProps) {
     });
   }, [priceKind, query, records, sourceSite]);
 
+  function downloadCsv() {
+    const csv = buildPriceTrackerCsv(filteredRecords);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = createPriceTrackerCsvFilename();
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <section className="grid gap-5">
       <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
@@ -98,6 +111,20 @@ export function PriceTrackerTable({ records }: PriceTrackerTableProps) {
               {kind}
             </button>
           ))}
+        </div>
+
+        <div className="mt-5 flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-6 text-slate-500">
+            {filteredRecords.length} filtered price signals are ready for export.
+          </p>
+          <button
+            type="button"
+            onClick={downloadCsv}
+            disabled={filteredRecords.length === 0}
+            className="inline-flex min-h-10 items-center justify-center rounded-md border border-slate-950 bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-100 disabled:text-slate-400"
+          >
+            Download CSV
+          </button>
         </div>
       </div>
 

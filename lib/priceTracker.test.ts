@@ -6,6 +6,8 @@ import {
   getPriceTrackerRecords,
   getPriceTrackerStats,
 } from "@/lib/priceTracker";
+import type { PriceTrackerRecord } from "@/lib/priceTracker";
+import { buildPriceTrackerCsv, createPriceTrackerCsvFilename } from "@/lib/priceTrackerCsv";
 
 describe("price tracker index", () => {
   it("extracts priced records from all source sites", () => {
@@ -34,5 +36,34 @@ describe("price tracker index", () => {
     assert.match(feed, /<title>AI Tool Price Tracker<\/title>/);
     assert.match(feed, /tools-price:/);
     assert.match(feed, /Price signal:/);
+  });
+
+  it("builds a CSV export for price signals", () => {
+    const records = getPriceTrackerRecords(2);
+    const csv = buildPriceTrackerCsv(records);
+
+    assert.match(csv, /^name,price,price_kind,source_site,source_url,category,pubDate,tags,description\n/);
+    assert.match(csv, /https:\/\//);
+    assert.equal(createPriceTrackerCsvFilename(new Date("2026-05-09T00:00:00Z")), "ai-tool-price-signals-2026-05-09.csv");
+  });
+
+  it("escapes CSV cells safely", () => {
+    const record: PriceTrackerRecord = {
+      id: "csv-test",
+      name: "CSV Test",
+      description: 'He said "ship it", then added a newline\nfor import testing.',
+      source_site: "ai-tools-pro",
+      source_url: "https://ai.toolrouteai.com/csv-test",
+      tags: ["=formula", "pricing"],
+      category: "Testing",
+      pubDate: "2026-05-09",
+      price: "$0,$10",
+      price_kind: "Variable",
+    };
+    const csv = buildPriceTrackerCsv([record]);
+
+    assert.match(csv, /"\$0,\$10"/);
+    assert.match(csv, /,'=formula; pricing,/);
+    assert.match(csv, /"He said ""ship it"", then added a newline\nfor import testing\."/);
   });
 });
