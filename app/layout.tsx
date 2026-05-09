@@ -54,7 +54,7 @@ export default function RootLayout({
             <Link href="/" className="text-sm font-semibold text-slate-950 transition hover:text-violet-700">
               Tools App
             </Link>
-            <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
+            <nav className="flex flex-wrap items-center gap-4 text-sm font-medium text-slate-600">
               <Link href="/prompt-optimizer" className="transition hover:text-slate-950">
                 Prompt Optimizer
               </Link>
@@ -63,6 +63,9 @@ export default function RootLayout({
               </Link>
               <Link href="/obsidian-template-generator" className="transition hover:text-slate-950">
                 Obsidian Templates
+              </Link>
+              <Link href="/price-tracker" className="transition hover:text-slate-950">
+                Price Tracker
               </Link>
             </nav>
           </div>
@@ -84,6 +87,9 @@ export default function RootLayout({
                 </Link>
                 <Link href="/obsidian-template-generator" className="transition hover:text-slate-950">
                   Obsidian Templates
+                </Link>
+                <Link href="/price-tracker" className="transition hover:text-slate-950">
+                  Price Tracker
                 </Link>
               </nav>
             </div>
