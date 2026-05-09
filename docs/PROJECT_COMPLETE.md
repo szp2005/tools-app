@@ -68,16 +68,28 @@ Price Tracker segment pages:
 - `/sitemap.xml`
 - `/robots.txt`
 
-Closeout health shape:
+Closeout health shape (abbreviated):
 
 ```json
 {
   "status": "ok",
-  "tools": 4,
-  "tool_index": 671,
-  "price_signals": 211,
-  "comparison_pairs": 4,
-  "price_segments": 5
+  "tools": [
+    {
+      "name": "Prompt Optimizer",
+      "path": "/prompt-optimizer",
+      "status": "available"
+    }
+  ],
+  "indexes": {
+    "tools": { "total": 671, "source_sites": 4 },
+    "obsidian": { "total": 500 },
+    "price_tracker": { "total": 211, "free": 102, "monthly": 37, "enterprise": 3, "sources": 4 }
+  },
+  "seo_pages": {
+    "comparison_pairs": 4,
+    "price_segments": 5,
+    "obsidian_scenarios": 3
+  }
 }
 ```
 

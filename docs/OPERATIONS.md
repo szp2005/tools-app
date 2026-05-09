@@ -188,15 +188,22 @@ Health:
 curl -s https://tools.toolrouteai.com/health.json | jq
 ```
 
-Expected closeout shape:
+Expected closeout shape (tools array abbreviated):
 
 ```json
 {
   "status": "ok",
-  "tools": 4,
+  "tools": [
+    {
+      "name": "Prompt Optimizer",
+      "path": "/prompt-optimizer",
+      "status": "available"
+    }
+  ],
   "indexes": {
     "tools": { "total": 671, "source_sites": 4 },
-    "price_tracker": { "total": 211 }
+    "obsidian": { "total": 500 },
+    "price_tracker": { "total": 211, "free": 102, "monthly": 37, "enterprise": 3, "sources": 4 }
   },
   "seo_pages": {
     "comparison_pairs": 4,
