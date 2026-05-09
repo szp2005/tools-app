@@ -2,13 +2,23 @@
 
 `tools.toolrouteai.com` is the free AI tools and newsletter subscription engine for the one-person-company portfolio.
 
-Week 1 focuses on shipping the Prompt Optimizer, Cloudflare Turnstile protection, Buttondown newsletter capture, and Cloudflare Pages deployment.
+Current focus: free workflow tools that reuse the four-site content portfolio, collect newsletter subscribers, and run cheaply on Cloudflare Pages.
 
-## Tools available
+## Tools Available
 
-- Prompt Optimizer: rewrites rough prompts into structured, model-ready instructions.
-- Comparison Builder: compares 2-5 tools from the four-site content index and exports Markdown or PDF.
-- Obsidian Template Generator: generates Markdown template packs for research, projects, and reading workflows.
+- [Prompt Optimizer](https://tools.toolrouteai.com/prompt-optimizer): rewrites rough prompts into structured, model-ready instructions. Protected by Turnstile and KV-backed daily rate limits.
+- [Comparison Builder](https://tools.toolrouteai.com/comparison): compares 2-5 tools from the four-site content index and exports Markdown or PDF. No LLM API call is used.
+- [Obsidian Template Generator](https://tools.toolrouteai.com/obsidian-template-generator): generates Markdown template packs for research, projects, and reading workflows entirely in the browser.
+
+## Obsidian Template Packs
+
+Static long-tail pages:
+
+- [Academic research templates](https://tools.toolrouteai.com/obsidian-template-generator/academic)
+- [Project management templates](https://tools.toolrouteai.com/obsidian-template-generator/project)
+- [Reading notes templates](https://tools.toolrouteai.com/obsidian-template-generator/reading)
+
+Each pack page includes scenario-specific metadata, structured data, FAQ content, internal links, and a dedicated Open Graph image.
 
 ## Getting Started
 
@@ -45,6 +55,8 @@ Required variables:
 npm run dev
 npm run build
 npm run lint
+npm run test:comparison
+npm run test:templates
 npm run pages:build
 npm run pages:deploy
 ```
