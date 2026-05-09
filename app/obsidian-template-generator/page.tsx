@@ -1,11 +1,16 @@
 import { ObsidianTemplateGenerator } from "@/components/ObsidianTemplateGenerator";
 import obsidianIndex from "@/data/obsidian-index.json";
+import type { Metadata } from "next";
 import type { ObsidianScenarioId } from "@/lib/obsidianTemplates";
 
-export const metadata = {
-  title: "Obsidian Template Generator | Tools App",
-  description:
-    "Generate practical Obsidian Markdown template packs for research, project management, and reading workflows.",
+const pageTitle = "Free Obsidian Template Generator | Tools App";
+const pageDescription =
+  "Generate practical Obsidian Markdown template packs for research, projects, reading notes, and PKM workflows.";
+const pageUrl = "https://tools.toolrouteai.com/obsidian-template-generator";
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
   keywords: [
     "Obsidian template generator",
     "Obsidian templates",
@@ -13,11 +18,34 @@ export const metadata = {
     "Markdown template pack",
     "knowledge management workflow",
   ],
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+    siteName: "Tools App",
+    images: [{ url: "/og-default.png", width: 1200, height: 630 }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pageTitle,
+    description: pageDescription,
+    images: ["/og-default.png"],
+  },
 };
 
 export default function ObsidianTemplateGeneratorPage() {
+  const structuredData = buildStructuredData();
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="mx-auto flex w-full min-w-0 max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10">
         <section className="max-w-3xl">
           <h1 className="text-4xl font-semibold tracking-normal text-slate-950 sm:text-5xl">
@@ -68,4 +96,63 @@ function buildGuidesByScenario() {
         })),
     ]),
   ) as Record<ObsidianScenarioId, Array<Pick<ObsidianIndexRecord, "id" | "title" | "description" | "source_site" | "source_url">>>;
+}
+
+function buildStructuredData() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        name: "Obsidian Template Generator",
+        url: pageUrl,
+        applicationCategory: "ProductivityApplication",
+        operatingSystem: "Web",
+        description: pageDescription,
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Tools App",
+            item: "https://tools.toolrouteai.com",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Obsidian Template Generator",
+            item: pageUrl,
+          },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Is the Obsidian Template Generator free?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. The generator runs in your browser and creates Markdown template packs without requiring a signup.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Which workflows are supported?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "The generator supports academic research, project operating systems, and reading notes.",
+            },
+          },
+        ],
+      },
+    ],
+  };
 }
