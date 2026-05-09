@@ -90,6 +90,8 @@ GitHub Actions:
 
 Full operations notes live in [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
+Project closeout snapshot lives in [docs/PROJECT_COMPLETE.md](docs/PROJECT_COMPLETE.md).
+
 If the local DNS resolver maps `tools.toolrouteai.com` to a private testing address, pin a Cloudflare edge IP for the smoke run:
 
 ```bash
