@@ -88,6 +88,8 @@ GitHub Actions:
 - `Tools App CI`: runs on `main` pushes and pull requests. It installs dependencies, runs the comparison, price tracker, and template tests, then runs lint, `next build`, and `@cloudflare/next-on-pages`.
 - `Tools App Production Smoke`: runs daily and by manual dispatch. It runs `npm run smoke:prod` against `https://tools.toolrouteai.com`.
 
+Full operations notes live in [docs/OPERATIONS.md](docs/OPERATIONS.md).
+
 If the local DNS resolver maps `tools.toolrouteai.com` to a private testing address, pin a Cloudflare edge IP for the smoke run:
 
 ```bash
