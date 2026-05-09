@@ -22,6 +22,24 @@ const toolCards = [
   },
 ];
 
+const obsidianScenarioLinks = [
+  {
+    name: "Academic research templates",
+    description: "Literature notes, research dashboards, and synthesis workflows.",
+    href: "/obsidian-template-generator/academic",
+  },
+  {
+    name: "Project management templates",
+    description: "Project dashboards, decision logs, weekly reviews, and operator workflows.",
+    href: "/obsidian-template-generator/project",
+  },
+  {
+    name: "Reading notes templates",
+    description: "Book notes, article capture, and idea distillation for creators.",
+    href: "/obsidian-template-generator/reading",
+  },
+];
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-white text-slate-950">
@@ -81,6 +99,37 @@ export default function Home() {
                 </article>
               );
             })}
+          </div>
+
+          <div className="mt-8 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-base font-semibold text-slate-950">Obsidian template packs</h2>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  Jump straight into a workflow-specific Markdown pack.
+                </p>
+              </div>
+              <Link
+                href="/obsidian-template-generator"
+                className="text-sm font-semibold text-slate-600 transition hover:text-slate-950"
+              >
+                Open generator
+              </Link>
+            </div>
+
+            <div className="mt-5 grid gap-3 md:grid-cols-3">
+              {obsidianScenarioLinks.map((scenario) => (
+                <Link
+                  key={scenario.href}
+                  href={scenario.href}
+                  className="rounded-lg border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:bg-slate-50"
+                >
+                  <span className="block text-sm font-semibold text-slate-950">{scenario.name}</span>
+                  <span className="mt-2 block text-sm leading-6 text-slate-600">{scenario.description}</span>
+                  <span className="mt-4 block text-sm font-semibold text-slate-950">Open pack</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
