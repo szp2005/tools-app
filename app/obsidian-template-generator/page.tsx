@@ -1,4 +1,6 @@
 import { ObsidianTemplateGenerator } from "@/components/ObsidianTemplateGenerator";
+import obsidianIndex from "@/data/obsidian-index.json";
+import type { ObsidianScenarioId } from "@/lib/obsidianTemplates";
 
 export const metadata = {
   title: "Obsidian Template Generator | Tools App",
@@ -26,8 +28,44 @@ export default function ObsidianTemplateGeneratorPage() {
           </p>
         </section>
 
-        <ObsidianTemplateGenerator />
+        <ObsidianTemplateGenerator guidesByScenario={buildGuidesByScenario()} />
       </div>
     </main>
   );
+}
+
+type ObsidianIndexRecord = {
+  id: string;
+  title: string;
+  description: string;
+  source_site: string;
+  source_url: string;
+  scenarios: ObsidianScenarioId[];
+  pubDate?: string;
+};
+
+function buildGuidesByScenario() {
+  const scenarios: ObsidianScenarioId[] = ["academic", "project", "reading"];
+
+  return Object.fromEntries(
+    scenarios.map((scenario) => [
+      scenario,
+      (obsidianIndex as ObsidianIndexRecord[])
+        .filter((record) => record.scenarios.includes(scenario))
+        .sort((a, b) => {
+          const primaryOrder = Number(b.scenarios[0] === scenario) - Number(a.scenarios[0] === scenario);
+          if (primaryOrder !== 0) return primaryOrder;
+
+          return (b.pubDate ?? "").localeCompare(a.pubDate ?? "");
+        })
+        .slice(0, 4)
+        .map(({ id, title, description, source_site, source_url }) => ({
+          id,
+          title,
+          description,
+          source_site,
+          source_url,
+        })),
+    ]),
+  ) as Record<ObsidianScenarioId, Array<Pick<ObsidianIndexRecord, "id" | "title" | "description" | "source_site" | "source_url">>>;
 }

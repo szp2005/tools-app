@@ -9,7 +9,19 @@ import {
   type ObsidianScenarioId,
 } from "@/lib/obsidianTemplates";
 
-export function ObsidianTemplateGenerator() {
+export type RelatedObsidianGuide = {
+  id: string;
+  title: string;
+  description: string;
+  source_site: string;
+  source_url: string;
+};
+
+type ObsidianTemplateGeneratorProps = {
+  guidesByScenario: Record<ObsidianScenarioId, RelatedObsidianGuide[]>;
+};
+
+export function ObsidianTemplateGenerator({ guidesByScenario }: ObsidianTemplateGeneratorProps) {
   const [scenarioId, setScenarioId] = useState<ObsidianScenarioId>("project");
   const [vaultName, setVaultName] = useState("Solo OS");
   const [detailLevel, setDetailLevel] = useState<"lean" | "guided">("guided");
@@ -23,6 +35,7 @@ export function ObsidianTemplateGenerator() {
     () => buildObsidianTemplateFiles({ scenarioId, vaultName, detailLevel }),
     [detailLevel, scenarioId, vaultName],
   );
+  const relatedGuides = guidesByScenario[scenarioId] ?? [];
 
   function downloadPack() {
     const blob = new Blob([pack], { type: "text/markdown;charset=utf-8" });
@@ -154,6 +167,31 @@ export function ObsidianTemplateGenerator() {
               ))}
             </ul>
           </div>
+
+          {relatedGuides.length > 0 ? (
+            <div className="mt-6 rounded-md bg-slate-50 p-4">
+              <p className="text-sm font-semibold text-slate-950">Related guides</p>
+              <div className="mt-3 grid gap-3">
+                {relatedGuides.map((guide) => (
+                  <a
+                    key={guide.id}
+                    href={guide.source_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-md bg-white p-3 text-sm transition hover:bg-slate-100"
+                  >
+                    <span className="block font-semibold leading-5 text-slate-950">{guide.title}</span>
+                    <span className="mt-1 line-clamp-2 block text-xs leading-5 text-slate-600">
+                      {guide.description}
+                    </span>
+                    <span className="mt-2 block text-xs font-semibold text-slate-500">
+                      {guide.source_site}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
