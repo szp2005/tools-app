@@ -380,7 +380,7 @@ export function ComparisonBuilder() {
                       <a
                         href={tool.source_url}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="transition hover:text-violet-700"
                       >
                         {tool.name}

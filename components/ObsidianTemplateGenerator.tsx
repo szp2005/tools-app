@@ -207,7 +207,7 @@ export function ObsidianTemplateGenerator({
                     key={guide.id}
                     href={guide.source_url}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="rounded-md bg-white p-3 text-sm transition hover:bg-slate-100"
                   >
                     <span className="block font-semibold leading-5 text-slate-950">{guide.title}</span>

@@ -8,6 +8,7 @@ type SmokeResponse = {
   status: number;
   body: string;
   contentType: string;
+  headers: Record<string, string | string[] | undefined>;
 };
 
 type SmokeCheck = {
@@ -36,8 +37,9 @@ const checks: SmokeCheck[] = [
     run: async () => {
       const response = await request("GET", "/");
       assertStatus(response, 200);
+      assertSecurityHeaders(response);
       assertContains(response.body, ["Prompt Optimizer", "Comparison Builder", "Obsidian Template Generator", "Price Tracker"]);
-      return "HTTP 200 + four tools visible";
+      return "HTTP 200 + four tools visible + security headers";
     },
   },
   {
@@ -245,6 +247,7 @@ function request(method: "GET" | "POST", pathname: string, jsonBody?: unknown): 
             status: res.statusCode ?? 0,
             body: Buffer.concat(chunks).toString("utf8"),
             contentType: String(res.headers["content-type"] ?? ""),
+            headers: res.headers,
           });
         });
       },
@@ -277,6 +280,22 @@ function assertContains(body: string, snippets: string[]) {
   const missing = snippets.filter((snippet) => !body.includes(snippet));
   if (missing.length > 0) {
     throw new Error(`missing snippets: ${missing.join(", ")}`);
+  }
+}
+
+function assertSecurityHeaders(response: SmokeResponse) {
+  assertHeader(response, "x-content-type-options", "nosniff");
+  assertHeader(response, "x-frame-options", "DENY");
+  assertHeader(response, "referrer-policy", "strict-origin-when-cross-origin");
+  assertHeader(response, "permissions-policy", "camera=()");
+}
+
+function assertHeader(response: SmokeResponse, name: string, expectedPart: string) {
+  const rawValue = response.headers[name.toLowerCase()];
+  const value = Array.isArray(rawValue) ? rawValue.join(", ") : String(rawValue ?? "");
+
+  if (!value.includes(expectedPart)) {
+    throw new Error(`expected ${name} containing ${expectedPart}, got ${value || "(missing)"}`);
   }
 }
 

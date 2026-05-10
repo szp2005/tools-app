@@ -176,7 +176,7 @@ export function PromptOptimizerForm() {
               key={link.name}
               href={link.href}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="rounded-md border border-slate-200 px-3 py-2 text-center text-sm font-medium text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
             >
               {link.name}

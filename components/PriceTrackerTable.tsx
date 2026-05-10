@@ -146,7 +146,7 @@ export function PriceTrackerTable({ records }: PriceTrackerTableProps) {
                   <a
                     href={record.source_url}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="font-semibold leading-6 text-slate-950 transition hover:text-violet-700"
                   >
                     {record.name}

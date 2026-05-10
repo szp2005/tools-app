@@ -117,7 +117,7 @@ export default function ComparisonPairPage({ params }: ComparisonPairPageProps) 
                     <a
                       href={tool.source_url}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="normal-case tracking-normal text-slate-950 transition hover:text-violet-700"
                     >
                       {tool.name}
