@@ -13,6 +13,8 @@ type ComparisonPairPageProps = {
   };
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return comparisonPages.map((page) => ({ pair: page.slug }));
 }

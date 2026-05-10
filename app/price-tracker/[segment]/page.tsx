@@ -15,6 +15,8 @@ type PriceTrackerSegmentPageProps = {
   };
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return priceTrackerSegments.map((segment) => ({ segment: segment.slug }));
 }

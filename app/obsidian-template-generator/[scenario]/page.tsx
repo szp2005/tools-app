@@ -16,6 +16,8 @@ type ScenarioPageProps = {
   };
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return Object.keys(obsidianScenarioPages).map((scenario) => ({ scenario }));
 }
