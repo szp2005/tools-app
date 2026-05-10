@@ -1,5 +1,8 @@
 import http from "node:http";
 import https from "node:https";
+import { obsidianScenarios } from "../lib/obsidianTemplates";
+import { comparisonPages } from "../lib/comparisonPages";
+import { priceTrackerSegments } from "../lib/priceTrackerSegments";
 
 type SmokeResponse = {
   status: number;
@@ -15,6 +18,17 @@ type SmokeCheck = {
 const baseUrl = (process.env.SMOKE_BASE_URL ?? "https://tools.toolrouteai.com").replace(/\/$/, "");
 const resolveIp = process.env.SMOKE_RESOLVE_IP?.trim();
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS ?? "15000");
+const canonicalBaseUrl = "https://tools.toolrouteai.com";
+const expectedSitemapUrls = [
+  canonicalBaseUrl,
+  `${canonicalBaseUrl}/prompt-optimizer`,
+  `${canonicalBaseUrl}/comparison`,
+  ...comparisonPages.map((page) => `${canonicalBaseUrl}/comparison/${page.slug}`),
+  `${canonicalBaseUrl}/obsidian-template-generator`,
+  ...obsidianScenarios.map((scenario) => `${canonicalBaseUrl}/obsidian-template-generator/${scenario.id}`),
+  `${canonicalBaseUrl}/price-tracker`,
+  ...priceTrackerSegments.map((segment) => `${canonicalBaseUrl}/price-tracker/${segment.slug}`),
+];
 
 const checks: SmokeCheck[] = [
   {
@@ -129,9 +143,9 @@ const checks: SmokeCheck[] = [
       const robots = await request("GET", "/robots.txt");
       assertStatus(sitemap, 200);
       assertStatus(robots, 200);
-      assertContains(sitemap.body, ["/prompt-optimizer", "/comparison", "/obsidian-template-generator", "/price-tracker"]);
+      assertContains(sitemap.body, expectedSitemapUrls);
       assertContains(robots.body, ["Disallow: /api/", "sitemap.xml"]);
-      return "sitemap + robots healthy";
+      return `sitemap has ${expectedSitemapUrls.length} expected URLs + robots healthy`;
     },
   },
   {

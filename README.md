@@ -56,7 +56,6 @@ Required variables:
 - `ANTHROPIC_API_KEY_TOOLS`
 - `BUTTONDOWN_API_KEY`
 - `TURNSTILE_SECRET_KEY`
-- `TURNSTILE_SITE_KEY`
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
 
 ## Stack
@@ -85,7 +84,7 @@ npm run pages:deploy
 
 GitHub Actions:
 
-- `Tools App CI`: runs on `main` pushes and pull requests. It installs dependencies, runs the comparison, price tracker, and template tests, then runs lint, `next build`, and `@cloudflare/next-on-pages`.
+- `Tools App CI`: runs on `main` pushes and pull requests. It installs dependencies, runs the comparison, price tracker, health, and template tests, then runs lint, `next build`, and `@cloudflare/next-on-pages`.
 - `Tools App Production Smoke`: runs daily and by manual dispatch. It runs `npm run smoke:prod` against `https://tools.toolrouteai.com`.
 
 Full operations notes live in [docs/OPERATIONS.md](docs/OPERATIONS.md).
