@@ -167,8 +167,8 @@ export function validateComparisonIds(input: unknown): string[] {
     throw new Error("ids must be an array.");
   }
 
-  if (input.length < 1) {
-    throw new Error("ids must include at least one item.");
+  if (input.length < 2) {
+    throw new Error("ids must include at least two unique items.");
   }
 
   if (input.length > MAX_BUILD_IDS) {
@@ -181,7 +181,12 @@ export function validateComparisonIds(input: unknown): string[] {
     throw new Error("ids may only contain lowercase letters, numbers, and hyphens.");
   }
 
-  return Array.from(new Set(ids));
+  const uniqueIds = Array.from(new Set(ids));
+  if (uniqueIds.length < 2) {
+    throw new Error("ids must include at least two unique items.");
+  }
+
+  return uniqueIds;
 }
 
 function scoreRecord(record: ToolIndexRecord, query: string, terms: string[]): number {

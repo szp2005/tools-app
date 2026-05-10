@@ -39,6 +39,17 @@ describe("comparison build", () => {
     );
   });
 
+  it("requires at least two unique ids", () => {
+    assert.throws(
+      () => validateComparisonIds(["ai-tools-pro-safe-id"]),
+      /at least two unique/,
+    );
+    assert.throws(
+      () => validateComparisonIds(["ai-tools-pro-safe-id", "ai-tools-pro-safe-id"]),
+      /at least two unique/,
+    );
+  });
+
   it("builds static comparison SEO pages", () => {
     assert.equal(comparisonPages.length, 4);
     assert.ok(getComparisonPage("midjourney-vs-dall-e-3"));
