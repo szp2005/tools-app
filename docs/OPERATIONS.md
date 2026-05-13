@@ -98,7 +98,7 @@ SMOKE_RESOLVE_IP=104.21.50.114 npm run smoke:prod
 Expected production smoke result at project close:
 
 ```text
-Summary: 17/17 passed
+Summary: 18/18 passed
 ```
 
 ## Deployment

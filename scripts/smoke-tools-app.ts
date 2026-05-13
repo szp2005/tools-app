@@ -184,6 +184,25 @@ const checks: SmokeCheck[] = [
     },
   },
   {
+    name: "zh-cn tool aliases",
+    run: async () => {
+      const paths = [
+        "/zh-cn/prompt-optimizer",
+        "/zh-cn/comparison",
+        "/zh-cn/obsidian-templates",
+        "/zh-cn/price-tracker",
+        "/zh-cn/side-hustle-ideas",
+      ];
+
+      for (const path of paths) {
+        const response = await request("GET", path);
+        assertStatus(response, 200);
+      }
+
+      return "five localized tool paths return HTTP 200";
+    },
+  },
+  {
     name: "blog index and articles",
     run: async () => {
       const index = await request("GET", "/blog");
