@@ -28,6 +28,7 @@ const expectedSitemapUrls = [
   `${canonicalBaseUrl}/obsidian-templates`,
   ...obsidianScenarios.map((scenario) => `${canonicalBaseUrl}/obsidian-templates/${scenario.id}`),
   `${canonicalBaseUrl}/price-tracker`,
+  `${canonicalBaseUrl}/side-hustle-ideas`,
   ...priceTrackerSegments.map((segment) => `${canonicalBaseUrl}/price-tracker/${segment.slug}`),
 ];
 
@@ -38,8 +39,8 @@ const checks: SmokeCheck[] = [
       const response = await request("GET", "/");
       assertStatus(response, 200);
       assertSecurityHeaders(response);
-      assertContains(response.body, ["Prompt Optimizer", "Comparison Builder", "Obsidian Template Generator", "Price Tracker"]);
-      return "HTTP 200 + four tools visible + security headers";
+      assertContains(response.body, ["Prompt Optimizer", "Comparison Builder", "Obsidian Template Generator", "Price Tracker", "Side Hustle Ideas"]);
+      return "HTTP 200 + five tools visible + security headers";
     },
   },
   {
@@ -49,7 +50,7 @@ const checks: SmokeCheck[] = [
       assertStatus(response, 200);
       assertContentType(response, "application/json");
       const data = parseJson(response.body);
-      if (data.status !== "ok" || data.tools?.length !== 4 || data.indexes?.price_tracker?.total < 200) {
+      if (data.status !== "ok" || data.tools?.length !== 5 || data.indexes?.price_tracker?.total < 200) {
         throw new Error("unexpected health payload");
       }
       return `HTTP 200 + ${data.tools.length} tools + ${data.indexes.price_tracker.total} price signals`;
@@ -149,6 +150,15 @@ const checks: SmokeCheck[] = [
         throw new Error("unexpected price changes payload");
       }
       return `HTTP 200 + ${data.stats.recent} recent changes`;
+    },
+  },
+  {
+    name: "side hustle ideas page",
+    run: async () => {
+      const response = await request("GET", "/side-hustle-ideas");
+      assertStatus(response, 200);
+      assertContains(response.body, ["Side Hustle Ideas Generator", "Generate Ideas", "Starting budget"]);
+      return "HTTP 200";
     },
   },
   {

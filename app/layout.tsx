@@ -67,6 +67,9 @@ export default function RootLayout({
               <Link href="/price-tracker" className="transition hover:text-slate-950">
                 Price Tracker
               </Link>
+              <Link href="/side-hustle-ideas" className="transition hover:text-slate-950">
+                Side Hustle Ideas
+              </Link>
             </nav>
           </div>
         </header>
@@ -90,6 +93,9 @@ export default function RootLayout({
                 </Link>
                 <Link href="/price-tracker" className="transition hover:text-slate-950">
                   Price Tracker
+                </Link>
+                <Link href="/side-hustle-ideas" className="transition hover:text-slate-950">
+                  Side Hustle Ideas
                 </Link>
               </nav>
             </div>

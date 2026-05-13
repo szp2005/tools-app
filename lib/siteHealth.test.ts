@@ -10,7 +10,7 @@ describe("site health payload", () => {
     assert.equal(payload.generated_at, "2026-05-09T00:00:00.000Z");
     assert.equal(payload.status, "ok");
     assert.equal(payload.site, "https://tools.toolrouteai.com");
-    assert.equal(payload.tools.length, 4);
+    assert.equal(payload.tools.length, 5);
     assert.ok(payload.indexes.tools.total >= 600);
     assert.equal(payload.indexes.tools.source_sites, 4);
     assert.ok(payload.indexes.obsidian.total > 0);
@@ -19,6 +19,7 @@ describe("site health payload", () => {
     assert.equal(payload.seo_pages.price_segments, 5);
     assert.equal(payload.seo_pages.obsidian_scenarios, 4);
     assert.equal(payload.tools[2].path, "/obsidian-templates");
+    assert.equal(payload.tools[4].path, "/side-hustle-ideas");
     assert.match(payload.machine_feeds.price_tracker_rss, /feed\.xml$/);
     assert.match(payload.machine_feeds.price_tracker_json, /index\.json$/);
   });

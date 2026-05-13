@@ -26,6 +26,12 @@ const toolCards = [
     status: "MVP",
     href: "/price-tracker",
   },
+  {
+    name: "Side Hustle Ideas",
+    description: "Generate practical side-hustle ideas from your skills, time, and starting budget.",
+    status: "Available",
+    href: "/side-hustle-ideas",
+  },
 ];
 
 const obsidianScenarioLinks = [
@@ -68,7 +74,7 @@ export default function Home() {
 
       <section className="border-t border-slate-200 bg-slate-50 px-5 py-12 sm:px-8">
         <div className="mx-auto w-full max-w-6xl">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {toolCards.map((tool) => {
               const isAvailable = tool.status === "Available" || tool.status === "MVP";
               const cardContent = (

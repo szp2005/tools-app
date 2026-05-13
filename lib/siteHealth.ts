@@ -59,6 +59,7 @@ export function buildSiteHealthPayload(generatedAt = new Date()): SiteHealthPayl
       { name: "Comparison Builder", path: "/comparison", status: "available" },
       { name: "Obsidian Template Generator", path: "/obsidian-templates", status: "available" },
       { name: "Price Tracker", path: "/price-tracker", status: "available" },
+      { name: "Side Hustle Ideas", path: "/side-hustle-ideas", status: "available" },
     ],
     indexes: {
       tools: {
