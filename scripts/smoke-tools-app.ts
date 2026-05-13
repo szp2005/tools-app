@@ -99,8 +99,8 @@ const checks: SmokeCheck[] = [
     run: async () => {
       const response = await request("GET", "/price-tracker");
       assertStatus(response, 200);
-      assertContains(response.body, ["AI Tool Price Tracker", "Download CSV", "RSS feed", "JSON index"]);
-      return "HTTP 200 + exports visible";
+      assertContains(response.body, ["AI Tool Price Tracker", "Download CSV", "Recent 30-day increases", "Change log JSON"]);
+      return "HTTP 200 + exports and change lists visible";
     },
   },
   {
@@ -136,6 +136,19 @@ const checks: SmokeCheck[] = [
         throw new Error(`unexpected price index payload: count=${data.count}, records=${data.records?.length}`);
       }
       return `HTTP 200 + ${data.count} records`;
+    },
+  },
+  {
+    name: "price tracker changes JSON",
+    run: async () => {
+      const response = await request("GET", "/price-tracker/changes.json");
+      assertStatus(response, 200);
+      assertContentType(response, "application/json");
+      const data = parseJson(response.body);
+      if (data.schema_version !== "1" || data.source_count < 50 || data.stats?.recent < 1) {
+        throw new Error("unexpected price changes payload");
+      }
+      return `HTTP 200 + ${data.stats.recent} recent changes`;
     },
   },
   {

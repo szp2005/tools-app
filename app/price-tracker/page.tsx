@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { PriceTrackerTable } from "@/components/PriceTrackerTable";
+import { SubscribeWidget } from "@/components/SubscribeWidget";
+import { getTopPriceDecreases, getTopPriceIncreases } from "@/lib/priceChanges";
 import { getPriceTrackerRecords, getPriceTrackerStats } from "@/lib/priceTracker";
 import { getPriceTrackerSegmentRecords, priceTrackerSegments } from "@/lib/priceTrackerSegments";
 
 const pageUrl = "https://tools.toolrouteai.com/price-tracker";
 const pageTitle = "AI Tool Price Tracker | Tools App";
 const pageDescription =
-  "Search indexed AI tool price signals from the Tools App content portfolio. Built from article metadata with no crawler or LLM cost.";
+  "Track AI tool pricing signals and recent pricing changes for ChatGPT, Claude, Midjourney, Copilot, and other creator tools.";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -54,8 +56,8 @@ export default function PriceTrackerPage() {
               AI Tool Price Tracker
             </h1>
             <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">
-              Search price signals pulled from the four-site content index. This is a lightweight
-              metadata tracker, not a live crawler, so always verify pricing on the vendor page.
+              Browse indexed price signals and recent monitored changes from official AI tool pricing pages.
+              Cron remains disabled until you explicitly enable it.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <a
@@ -69,6 +71,12 @@ export default function PriceTrackerPage() {
                 className="inline-flex min-h-10 items-center rounded-md border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:text-slate-950"
               >
                 JSON index
+              </a>
+              <a
+                href="/price-tracker/changes.json"
+                className="inline-flex min-h-10 items-center rounded-md border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:text-slate-950"
+              >
+                Change log JSON
               </a>
             </div>
           </div>
@@ -95,6 +103,8 @@ export default function PriceTrackerPage() {
             </dl>
           </div>
         </section>
+
+        <PriceChangeSummary />
 
         <section className="grid gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <div>
@@ -125,5 +135,79 @@ export default function PriceTrackerPage() {
         <PriceTrackerTable records={records} />
       </div>
     </main>
+  );
+}
+
+function PriceChangeSummary() {
+  const increases = getTopPriceIncreases();
+  const decreases = getTopPriceDecreases();
+
+  return (
+    <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-5 md:grid-cols-2">
+        <PriceChangeList title="Recent 30-day increases" records={increases} tone="increase" />
+        <PriceChangeList title="Recent 30-day decreases" records={decreases} tone="decrease" />
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-lg font-semibold text-slate-950">Price-change alerts</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">
+          Get the weekly digest when monitored AI tools change pricing, quotas, or premium usage rules.
+        </p>
+        <SubscribeWidget variant="inline" source="tool" />
+      </div>
+    </section>
+  );
+}
+
+function PriceChangeList({
+  title,
+  records,
+  tone,
+}: {
+  title: string;
+  records: ReturnType<typeof getTopPriceIncreases>;
+  tone: "increase" | "decrease";
+}) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <h2 className="text-lg font-semibold text-slate-950">{title}</h2>
+        <span
+          className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+            tone === "increase" ? "bg-rose-100 text-rose-700" : "bg-emerald-100 text-emerald-700"
+          }`}
+        >
+          Top 10
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        {records.length > 0 ? (
+          records.map((record) => (
+            <a
+              key={record.id}
+              href={record.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-md border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-300 hover:bg-white"
+            >
+              <span className="flex items-start justify-between gap-3">
+                <span className="font-semibold leading-6 text-slate-950">{record.tool}</span>
+                <span className="text-xs font-semibold text-slate-500">{record.changed_at}</span>
+              </span>
+              <span className="mt-2 block text-sm leading-6 text-slate-600">{record.summary}</span>
+              <span className="mt-3 block text-xs leading-5 text-slate-500">
+                {record.previous_price} to {record.current_price}
+              </span>
+            </a>
+          ))
+        ) : (
+          <p className="rounded-md bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+            No monitored {tone === "increase" ? "increases" : "decreases"} in the last 30 days.
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

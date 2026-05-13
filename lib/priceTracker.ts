@@ -1,5 +1,6 @@
 import toolsIndex from "../data/tools-index.json";
 import type { SourceSite, ToolIndexRecord } from "./comparison";
+import { buildPriceChangePayload } from "./priceChanges";
 
 export type PriceKind =
   | "Free"
@@ -38,6 +39,7 @@ export type PriceTrackerIndexPayload = {
   count: number;
   latest_pub_date?: string;
   stats: PriceTrackerStats;
+  changes: ReturnType<typeof buildPriceChangePayload>;
   records: PriceTrackerRecord[];
 };
 
@@ -158,6 +160,7 @@ export function buildPriceTrackerIndexPayload(
     count: records.length,
     latest_pub_date: getLatestPriceTrackerPubDate(records),
     stats: getPriceTrackerStats(records),
+    changes: buildPriceChangePayload(),
     records,
   };
 }

@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  buildPriceChangePayload,
+  getTopPriceDecreases,
+  getTopPriceIncreases,
+  getRecentPriceChanges,
+} from "@/lib/priceChanges";
+import {
   buildPriceTrackerFeedXml,
   buildPriceTrackerIndexPayload,
   classifyPrice,
@@ -56,9 +62,24 @@ describe("price tracker index", () => {
     assert.equal(payload.count, 4);
     assert.equal(payload.records.length, 4);
     assert.equal(payload.stats.total, 4);
+    assert.ok(payload.changes.source_count >= 50);
     assert.ok(payload.latest_pub_date);
     assert.deepEqual(payload.latest_pub_date, getLatestPriceTrackerPubDate(records));
     assert.ok(payload.records.every((record) => record.id && record.price && record.price_kind));
+  });
+
+  it("summarizes recent official price changes", () => {
+    const now = new Date("2026-05-13T00:00:00Z");
+    const recent = getRecentPriceChanges(30, now);
+    const increases = getTopPriceIncreases(30, now);
+    const decreases = getTopPriceDecreases(30, now);
+    const payload = buildPriceChangePayload(30, now);
+
+    assert.ok(recent.length >= 2);
+    assert.ok(increases.some((record) => record.tool === "GitHub Copilot"));
+    assert.ok(decreases.some((record) => record.tool === "ChatGPT Pro"));
+    assert.equal(payload.cron_enabled, false);
+    assert.ok(payload.source_count >= 50);
   });
 
   it("builds a CSV export for price signals", () => {

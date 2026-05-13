@@ -1,0 +1,77 @@
+{
+  "schema_version": "1",
+  "generated_at": "2026-05-13T00:00:00.000Z",
+  "source": "manual-verified-seed",
+  "records": [
+    {
+      "id": "github-copilot-claude-opus-47-multiplier-2026-05-01",
+      "tool": "GitHub Copilot",
+      "category": "AI coding",
+      "change_type": "increase",
+      "changed_at": "2026-05-01",
+      "previous_price": "Claude Opus 4.7 promotional pricing: 7.5 premium request multiplier",
+      "current_price": "Claude Opus 4.7: 15 premium request multiplier",
+      "summary": "GitHub updated Claude Opus 4.7 Copilot billing from the promotional 7.5x multiplier to 15x after April 30.",
+      "source_url": "https://github.blog/changelog/2026-04-16-claude-opus-4-7-is-generally-available/",
+      "evidence_url": "https://docs.github.com/copilot/reference/copilot-billing/models-and-pricing",
+      "impact_score": 95,
+      "detected_by": "manual-official-source"
+    },
+    {
+      "id": "chatgpt-pro-codex-double-usage-2026-05-13",
+      "tool": "ChatGPT Pro",
+      "category": "AI assistant",
+      "change_type": "decrease",
+      "changed_at": "2026-05-13",
+      "previous_price": "Normal included Codex usage on the Pro plan",
+      "current_price": "Double normal Codex usage on the Pro plan until May 31, 2026",
+      "summary": "OpenAI lists a temporary doubling of normal Codex usage on the Pro plan, which lowers effective per-task cost for heavy Codex users during the promo window.",
+      "source_url": "https://chatgpt.com/pricing/",
+      "evidence_url": "https://chatgpt.com/pricing/",
+      "impact_score": 70,
+      "detected_by": "manual-official-source"
+    },
+    {
+      "id": "notion-plus-price-ai-bundled-2025-11",
+      "tool": "Notion",
+      "category": "Productivity",
+      "change_type": "increase",
+      "changed_at": "2025-11-01",
+      "previous_price": "Plus plan reported at $8/user/month with AI as a separate add-on",
+      "current_price": "Plus plan reported at $10/user/month with Notion AI bundled",
+      "summary": "Notion Plus became more expensive while bundling AI features into the core plan.",
+      "source_url": "https://www.notion.com/pricing",
+      "evidence_url": "https://aicores.io/pricing-changes",
+      "impact_score": 50,
+      "detected_by": "manual-secondary-source"
+    },
+    {
+      "id": "elevenlabs-starter-character-limit-2025-06",
+      "tool": "ElevenLabs",
+      "category": "AI audio",
+      "change_type": "decrease",
+      "changed_at": "2025-06-01",
+      "previous_price": "Starter plan with 30,000 characters",
+      "current_price": "Starter plan with 100,000 characters",
+      "summary": "ElevenLabs kept the Starter price but raised included character quota, reducing effective cost per character.",
+      "source_url": "https://elevenlabs.io/pricing",
+      "evidence_url": "https://aicores.io/pricing-changes",
+      "impact_score": 65,
+      "detected_by": "manual-secondary-source"
+    },
+    {
+      "id": "supabase-pro-db-size-2025-09",
+      "tool": "Supabase",
+      "category": "Developer platform",
+      "change_type": "decrease",
+      "changed_at": "2025-09-01",
+      "previous_price": "Pro plan with 8GB included database size",
+      "current_price": "Pro plan with 16GB included database size",
+      "summary": "Supabase kept Pro pricing stable while doubling included database size.",
+      "source_url": "https://supabase.com/pricing",
+      "evidence_url": "https://aicores.io/pricing-changes",
+      "impact_score": 45,
+      "detected_by": "manual-secondary-source"
+    }
+  ]
+}
