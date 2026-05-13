@@ -10,6 +10,7 @@ describe("site health payload", () => {
     assert.equal(payload.generated_at, "2026-05-09T00:00:00.000Z");
     assert.equal(payload.status, "ok");
     assert.equal(payload.site, "https://tools.toolrouteai.com");
+    assert.deepEqual(payload.locales, ["en", "zh-CN"]);
     assert.equal(payload.tools.length, 5);
     assert.ok(payload.indexes.tools.total >= 600);
     assert.equal(payload.indexes.tools.source_sites, 4);

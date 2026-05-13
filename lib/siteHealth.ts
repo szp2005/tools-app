@@ -11,6 +11,7 @@ export type SiteHealthPayload = {
   generated_at: string;
   status: "ok";
   site: string;
+  locales: string[];
   tools: Array<{
     name: string;
     path: string;
@@ -54,6 +55,7 @@ export function buildSiteHealthPayload(generatedAt = new Date()): SiteHealthPayl
     generated_at: generatedAt.toISOString(),
     status: "ok",
     site: siteUrl,
+    locales: ["en", "zh-CN"],
     tools: [
       { name: "Prompt Optimizer", path: "/prompt-optimizer", status: "available" },
       { name: "Comparison Builder", path: "/comparison", status: "available" },

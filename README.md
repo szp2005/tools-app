@@ -8,8 +8,10 @@ Current focus: free workflow tools that reuse the four-site content portfolio, c
 
 - [Prompt Optimizer](https://tools.toolrouteai.com/prompt-optimizer): rewrites rough prompts into structured, model-ready instructions. Protected by Turnstile and KV-backed daily rate limits.
 - [Comparison Builder](https://tools.toolrouteai.com/comparison): compares 2-5 tools from the four-site content index and exports Markdown or PDF. No LLM API call is used.
-- [Obsidian Template Generator](https://tools.toolrouteai.com/obsidian-template-generator): generates Markdown template packs for research, projects, and reading workflows entirely in the browser.
-- [Price Tracker](https://tools.toolrouteai.com/price-tracker): searches indexed AI tool price signals from article metadata, with filtered CSV export, RSS, and a machine-readable JSON index. This is an MVP metadata tracker, not a live price crawler. RSS: [price-tracker/feed.xml](https://tools.toolrouteai.com/price-tracker/feed.xml), JSON: [price-tracker/index.json](https://tools.toolrouteai.com/price-tracker/index.json)
+- [Obsidian Template Generator](https://tools.toolrouteai.com/obsidian-templates): generates Markdown, Dataview, and Templater-friendly Obsidian template packs with browser-side `.zip` export.
+- [Price Tracker](https://tools.toolrouteai.com/price-tracker): tracks 50+ official AI tool pricing pages and shows verified price-change signals. Cron is intentionally disabled by default. RSS: [price-tracker/feed.xml](https://tools.toolrouteai.com/price-tracker/feed.xml), JSON: [price-tracker/index.json](https://tools.toolrouteai.com/price-tracker/index.json), changes: [price-tracker/changes.json](https://tools.toolrouteai.com/price-tracker/changes.json)
+- [Side Hustle Ideas](https://tools.toolrouteai.com/side-hustle-ideas): generates three practical side-hustle ideas from a user's skill, weekly time, and starting budget. Protected by Turnstile and KV-backed daily rate limits.
+- [Chinese landing page](https://tools.toolrouteai.com/zh-cn): localized entrypoint for the tools suite.
 - [Health JSON](https://tools.toolrouteai.com/health.json): machine-readable status summary for tools, content indexes, SEO pages, and feeds.
 
 Comparison index pages:
@@ -31,11 +33,18 @@ Price Tracker index pages:
 
 Static long-tail pages:
 
-- [Academic research templates](https://tools.toolrouteai.com/obsidian-template-generator/academic)
-- [Project management templates](https://tools.toolrouteai.com/obsidian-template-generator/project)
-- [Reading notes templates](https://tools.toolrouteai.com/obsidian-template-generator/reading)
+- [Academic research templates](https://tools.toolrouteai.com/obsidian-templates/academic)
+- [Project management templates](https://tools.toolrouteai.com/obsidian-templates/project)
+- [Reading notes templates](https://tools.toolrouteai.com/obsidian-templates/reading)
+- [Creative workflow templates](https://tools.toolrouteai.com/obsidian-templates/creative)
 
 Each pack page includes scenario-specific metadata, structured data, FAQ content, internal links, and a dedicated Open Graph image.
+
+## Localization
+
+- Primary locale: English (`/`)
+- Active localized entrypoint: Simplified Chinese (`/zh-cn`)
+- The Chinese entrypoint is intentionally a landing and navigation layer first. Individual tool UIs remain stable in English until traffic and subscription data show which pages should be fully localized next.
 
 ## Getting Started
 
@@ -74,7 +83,9 @@ npm run lint
 npm run test:comparison
 npm run test:health
 npm run test:price-tracker
+npm run test:side-hustle
 npm run test:templates
+npm run price:check -- --dry-run --limit 5
 npm run smoke:prod
 npm run pages:build
 npm run pages:deploy

@@ -29,6 +29,7 @@ const expectedSitemapUrls = [
   ...obsidianScenarios.map((scenario) => `${canonicalBaseUrl}/obsidian-templates/${scenario.id}`),
   `${canonicalBaseUrl}/price-tracker`,
   `${canonicalBaseUrl}/side-hustle-ideas`,
+  `${canonicalBaseUrl}/zh-cn`,
   ...priceTrackerSegments.map((segment) => `${canonicalBaseUrl}/price-tracker/${segment.slug}`),
 ];
 
@@ -50,10 +51,15 @@ const checks: SmokeCheck[] = [
       assertStatus(response, 200);
       assertContentType(response, "application/json");
       const data = parseJson(response.body);
-      if (data.status !== "ok" || data.tools?.length !== 5 || data.indexes?.price_tracker?.total < 200) {
+      if (
+        data.status !== "ok" ||
+        data.tools?.length !== 5 ||
+        !data.locales?.includes("zh-CN") ||
+        data.indexes?.price_tracker?.total < 200
+      ) {
         throw new Error("unexpected health payload");
       }
-      return `HTTP 200 + ${data.tools.length} tools + ${data.indexes.price_tracker.total} price signals`;
+      return `HTTP 200 + ${data.tools.length} tools + ${data.locales.length} locales + ${data.indexes.price_tracker.total} price signals`;
     },
   },
   {
@@ -159,6 +165,15 @@ const checks: SmokeCheck[] = [
       assertStatus(response, 200);
       assertContains(response.body, ["Side Hustle Ideas Generator", "Generate Ideas", "Starting budget"]);
       return "HTTP 200";
+    },
+  },
+  {
+    name: "zh-cn landing page",
+    run: async () => {
+      const response = await request("GET", "/zh-cn");
+      assertStatus(response, 200);
+      assertContains(response.body, ["Tools App 中文入口", "免费 AI 工具箱", "已上线工具"]);
+      return "HTTP 200 + Chinese landing copy";
     },
   },
   {

@@ -44,6 +44,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    {
+      url: `${base}/zh-cn`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     ...obsidianScenarios.map((scenario) => ({
       url: `${base}/obsidian-templates/${scenario.id}`,
       lastModified: new Date(),

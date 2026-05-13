@@ -8,6 +8,20 @@ type SubscribeStatus = "idle" | "loading" | "success" | "already" | "error";
 type SubscribeWidgetProps = {
   variant: SubscribeVariant;
   source?: "hero" | "footer" | "tool" | "default";
+  copy?: Partial<SubscribeCopy>;
+};
+
+type SubscribeCopy = {
+  label: string;
+  description: string;
+  placeholder: string;
+  ariaLabel: string;
+  button: string;
+  loading: string;
+  success: string;
+  already: string;
+  error: string;
+  invalidEmail: string;
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -49,34 +63,42 @@ const variantStyles: Record<
   },
 };
 
-const statusCopy: Record<Exclude<SubscribeStatus, "idle" | "loading">, string> = {
+const defaultCopy: SubscribeCopy = {
+  label: "Weekly AI tools digest",
+  description: "Get practical AI tools, prompt ideas, and creator workflow notes in your inbox.",
+  placeholder: "you@example.com",
+  ariaLabel: "Email address",
+  button: "Subscribe",
+  loading: "Subscribing...",
   success: "Subscribed. Check your inbox for the next digest.",
   already: "已订阅过",
   error: "Subscription failed, please try again later",
+  invalidEmail: "Please enter a valid email address.",
 };
 
-export function SubscribeWidget({ variant, source = "default" }: SubscribeWidgetProps) {
+export function SubscribeWidget({ variant, source = "default", copy }: SubscribeWidgetProps) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<SubscribeStatus>("idle");
   const [error, setError] = useState("");
   const styles = variantStyles[variant];
   const sourceValue = source || variant || "default";
+  const text = useMemo(() => ({ ...defaultCopy, ...copy }), [copy]);
 
   const message = useMemo(() => {
     if (status === "loading") {
-      return "Subscribing...";
+      return text.loading;
     }
 
     if (status === "error") {
-      return error || statusCopy.error;
+      return error || text.error;
     }
 
     if (status === "idle") {
       return "";
     }
 
-    return statusCopy[status];
-  }, [error, status]);
+    return text[status];
+  }, [error, status, text]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -84,7 +106,7 @@ export function SubscribeWidget({ variant, source = "default" }: SubscribeWidget
 
     if (!EMAIL_PATTERN.test(trimmedEmail)) {
       setStatus("error");
-      setError("Please enter a valid email address.");
+      setError(text.invalidEmail);
       return;
     }
 
@@ -106,22 +128,22 @@ export function SubscribeWidget({ variant, source = "default" }: SubscribeWidget
       const data = (await response.json()) as { ok?: boolean; already?: boolean; error?: string };
 
       if (!response.ok || !data.ok) {
-        throw new Error(data.error || statusCopy.error);
+        throw new Error(data.error || text.error);
       }
 
       setEmail(trimmedEmail);
       setStatus(data.already ? "already" : "success");
     } catch (requestError) {
       setStatus("error");
-      setError(requestError instanceof Error ? requestError.message : statusCopy.error);
+      setError(requestError instanceof Error ? requestError.message : text.error);
     }
   }
 
   return (
     <section className={styles.wrapper} aria-label="Newsletter subscription">
-      <p className={styles.label}>Weekly AI tools digest</p>
+      <p className={styles.label}>{text.label}</p>
       <p className="mt-2 text-sm leading-6 text-slate-600">
-        Get practical AI tools, prompt ideas, and creator workflow notes in your inbox.
+        {text.description}
       </p>
 
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
@@ -135,12 +157,12 @@ export function SubscribeWidget({ variant, source = "default" }: SubscribeWidget
               setError("");
             }
           }}
-          placeholder="you@example.com"
+          placeholder={text.placeholder}
           className={styles.input}
-          aria-label="Email address"
+          aria-label={text.ariaLabel}
         />
         <button type="submit" disabled={status === "loading"} className={styles.button}>
-          {status === "loading" ? "Subscribing..." : "Subscribe"}
+          {status === "loading" ? text.loading : text.button}
         </button>
       </form>
 
