@@ -37,6 +37,7 @@ export type SiteHealthPayload = {
     comparison_pairs: number;
     price_segments: number;
     obsidian_scenarios: number;
+    blog_articles: number;
   };
   machine_feeds: {
     price_tracker_rss: string;
@@ -45,6 +46,7 @@ export type SiteHealthPayload = {
 };
 
 const siteUrl = "https://tools.toolrouteai.com";
+const blogArticleCount = 5;
 
 export function buildSiteHealthPayload(generatedAt = new Date()): SiteHealthPayload {
   const toolRecords = toolsIndex as ToolIndexRecord[];
@@ -77,6 +79,7 @@ export function buildSiteHealthPayload(generatedAt = new Date()): SiteHealthPayl
       comparison_pairs: comparisonPages.length,
       price_segments: priceTrackerSegments.length,
       obsidian_scenarios: obsidianScenarios.length,
+      blog_articles: blogArticleCount,
     },
     machine_feeds: {
       price_tracker_rss: `${siteUrl}/price-tracker/feed.xml`,

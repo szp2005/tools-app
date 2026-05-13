@@ -1,10 +1,12 @@
 import type { MetadataRoute } from "next";
+import { getBlogArticles } from "@/lib/blog";
 import { comparisonPages } from "@/lib/comparisonPages";
 import { obsidianScenarios } from "@/lib/obsidianTemplates";
 import { priceTrackerSegments } from "@/lib/priceTrackerSegments";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://tools.toolrouteai.com";
+  const blogArticles = getBlogArticles();
 
   return [
     { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
@@ -50,6 +52,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${base}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    ...blogArticles.map((article) => ({
+      url: article.url,
+      lastModified: new Date(article.publishedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    })),
     ...obsidianScenarios.map((scenario) => ({
       url: `${base}/obsidian-templates/${scenario.id}`,
       lastModified: new Date(),

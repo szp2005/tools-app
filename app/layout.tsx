@@ -76,6 +76,9 @@ export default function RootLayout({
               <Link href="/side-hustle-ideas" className="transition hover:text-slate-950">
                 Side Hustle Ideas
               </Link>
+              <Link href="/blog" className="transition hover:text-slate-950">
+                Blog
+              </Link>
               <Link href="/zh-cn" className="transition hover:text-slate-950">
                 中文
               </Link>
@@ -105,6 +108,9 @@ export default function RootLayout({
                 </Link>
                 <Link href="/side-hustle-ideas" className="transition hover:text-slate-950">
                   Side Hustle Ideas
+                </Link>
+                <Link href="/blog" className="transition hover:text-slate-950">
+                  Blog
                 </Link>
                 <Link href="/zh-cn" className="transition hover:text-slate-950">
                   中文

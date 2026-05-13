@@ -1,5 +1,6 @@
 import http from "node:http";
 import https from "node:https";
+import { getBlogArticles } from "../lib/blog";
 import { obsidianScenarios } from "../lib/obsidianTemplates";
 import { comparisonPages } from "../lib/comparisonPages";
 import { priceTrackerSegments } from "../lib/priceTrackerSegments";
@@ -20,6 +21,7 @@ const baseUrl = (process.env.SMOKE_BASE_URL ?? "https://tools.toolrouteai.com").
 const resolveIp = process.env.SMOKE_RESOLVE_IP?.trim();
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS ?? "15000");
 const canonicalBaseUrl = "https://tools.toolrouteai.com";
+const blogArticles = getBlogArticles();
 const expectedSitemapUrls = [
   canonicalBaseUrl,
   `${canonicalBaseUrl}/prompt-optimizer`,
@@ -30,6 +32,8 @@ const expectedSitemapUrls = [
   `${canonicalBaseUrl}/price-tracker`,
   `${canonicalBaseUrl}/side-hustle-ideas`,
   `${canonicalBaseUrl}/zh-cn`,
+  `${canonicalBaseUrl}/blog`,
+  ...blogArticles.map((article) => article.url),
   ...priceTrackerSegments.map((segment) => `${canonicalBaseUrl}/price-tracker/${segment.slug}`),
 ];
 
@@ -174,6 +178,19 @@ const checks: SmokeCheck[] = [
       assertStatus(response, 200);
       assertContains(response.body, ["Tools App 中文入口", "免费 AI 工具箱", "已上线工具"]);
       return "HTTP 200 + Chinese landing copy";
+    },
+  },
+  {
+    name: "blog index and articles",
+    run: async () => {
+      const index = await request("GET", "/blog");
+      assertStatus(index, 200);
+      assertContains(index.body, ["Tools App Blog", "How to Use a Prompt Optimizer Effectively"]);
+
+      const firstArticle = await request("GET", `/blog/${blogArticles[0].slug}`);
+      assertStatus(firstArticle, 200);
+      assertContains(firstArticle.body, ["SoftwareApplication", "Article", "Try the tool"]);
+      return `HTTP 200 + ${blogArticles.length} article URLs indexed`;
     },
   },
   {

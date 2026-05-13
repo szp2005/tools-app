@@ -12,7 +12,16 @@ Current focus: free workflow tools that reuse the four-site content portfolio, c
 - [Price Tracker](https://tools.toolrouteai.com/price-tracker): tracks 50+ official AI tool pricing pages and shows verified price-change signals. Cron is intentionally disabled by default. RSS: [price-tracker/feed.xml](https://tools.toolrouteai.com/price-tracker/feed.xml), JSON: [price-tracker/index.json](https://tools.toolrouteai.com/price-tracker/index.json), changes: [price-tracker/changes.json](https://tools.toolrouteai.com/price-tracker/changes.json)
 - [Side Hustle Ideas](https://tools.toolrouteai.com/side-hustle-ideas): generates three practical side-hustle ideas from a user's skill, weekly time, and starting budget. Protected by Turnstile and KV-backed daily rate limits.
 - [Chinese landing page](https://tools.toolrouteai.com/zh-cn): localized entrypoint for the tools suite.
+- [Blog](https://tools.toolrouteai.com/blog): long-form tutorial articles that support the five tools with search-indexable examples and workflows.
 - [Health JSON](https://tools.toolrouteai.com/health.json): machine-readable status summary for tools, content indexes, SEO pages, and feeds.
+
+Blog tutorial pages:
+
+- [How to Use a Prompt Optimizer Effectively](https://tools.toolrouteai.com/blog/how-to-use-prompt-optimizer-effectively)
+- [AI Tool Comparison Guide for Solopreneurs](https://tools.toolrouteai.com/blog/ai-tool-comparison-guide-for-solopreneurs)
+- [Obsidian Template Best Practices](https://tools.toolrouteai.com/blog/obsidian-template-best-practices)
+- [AI Tool Price Monitoring Strategy](https://tools.toolrouteai.com/blog/ai-tool-price-monitoring-strategy)
+- [Finding the Right Side Hustle With AI](https://tools.toolrouteai.com/blog/finding-the-right-side-hustle-with-ai)
 
 Comparison index pages:
 
@@ -85,6 +94,7 @@ Optional variables:
 npm run dev
 npm run build
 npm run lint
+npm run test:blog
 npm run test:comparison
 npm run test:health
 npm run test:price-tracker

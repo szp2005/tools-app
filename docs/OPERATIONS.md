@@ -16,6 +16,7 @@ Core tools:
 - AI Tool Price Tracker: `/price-tracker`
 - Side Hustle Ideas: `/side-hustle-ideas`
 - Chinese entrypoint: `/zh-cn`
+- Blog index: `/blog`
 
 Machine-readable endpoints:
 
@@ -26,6 +27,13 @@ Machine-readable endpoints:
 - Robots: `/robots.txt`
 
 SEO index pages:
+
+- Blog tutorials:
+  - `/blog/how-to-use-prompt-optimizer-effectively`
+  - `/blog/ai-tool-comparison-guide-for-solopreneurs`
+  - `/blog/obsidian-template-best-practices`
+  - `/blog/ai-tool-price-monitoring-strategy`
+  - `/blog/finding-the-right-side-hustle-with-ai`
 
 - Comparison pages:
   - `/comparison/midjourney-vs-dall-e-3`
@@ -52,6 +60,7 @@ Run this before committing product code:
 npm run test:comparison
 npm run test:price-tracker
 npm run test:health
+npm run test:blog
 npm run test:side-hustle
 npm run test:templates
 npm run lint
