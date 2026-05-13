@@ -12,8 +12,10 @@ Core tools:
 
 - Prompt Optimizer: `/prompt-optimizer`
 - Comparison Builder: `/comparison`
-- Obsidian Template Generator: `/obsidian-template-generator`
+- Obsidian Template Generator: `/obsidian-templates`
 - AI Tool Price Tracker: `/price-tracker`
+- Side Hustle Ideas: `/side-hustle-ideas`
+- Chinese entrypoint: `/zh-cn`
 
 Machine-readable endpoints:
 
@@ -31,9 +33,10 @@ SEO index pages:
   - `/comparison/n8n-vs-zapier`
   - `/comparison/zotero-vs-mendeley`
 - Obsidian scenario pages:
-  - `/obsidian-template-generator/academic`
-  - `/obsidian-template-generator/project`
-  - `/obsidian-template-generator/reading`
+  - `/obsidian-templates/academic`
+  - `/obsidian-templates/project`
+  - `/obsidian-templates/reading`
+  - `/obsidian-templates/creative`
 - Price Tracker segment pages:
   - `/price-tracker/free-ai-tools`
   - `/price-tracker/subscription-ai-tools`
@@ -49,6 +52,7 @@ Run this before committing product code:
 npm run test:comparison
 npm run test:price-tracker
 npm run test:health
+npm run test:side-hustle
 npm run test:templates
 npm run lint
 npm run build
@@ -70,7 +74,7 @@ SMOKE_RESOLVE_IP=104.21.50.114 npm run smoke:prod
 Expected production smoke result at project close:
 
 ```text
-Summary: 13/13 passed
+Summary: 16/16 passed
 ```
 
 ## Deployment
@@ -100,6 +104,7 @@ Cloudflare Pages production environment should include:
 - `BUTTONDOWN_API_KEY`
 - `TURNSTILE_SECRET_KEY`
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+- `NEXT_PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` (optional, 32-character beacon token)
 
 Public Turnstile site key:
 
@@ -166,6 +171,33 @@ Important boundary:
 - The dispatcher creates `status: draft`.
 - The user manually previews and publishes in Buttondown.
 - Never add automatic publishing unless the user explicitly asks.
+
+Newsletter stats archive:
+
+```bash
+cd /Users/szp2005/one-person-company
+./venv/bin/python dispatcher.py /newsletter-stats latest
+./venv/bin/python dispatcher.py /newsletter-stats em_5gsj3ja1y897zbbj0j4n3nm861
+```
+
+Stats are appended to `reports/newsletter_stats.md`.
+
+## Cloudflare Web Analytics
+
+The app injects Cloudflare Web Analytics only when a valid 32-character token is present:
+
+```bash
+NEXT_PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=<32-char-token>
+```
+
+Recommended setup:
+
+1. Cloudflare Dashboard → Analytics & Logs → Web Analytics.
+2. Add site: `tools.toolrouteai.com`.
+3. Copy the beacon token from the JS snippet.
+4. Add it to Cloudflare Pages → tools-app → Settings → Environment variables.
+5. Retry production deployment.
+6. Visit `/`, `/comparison`, and `/zh-cn`, then verify PV / UV / referrers in Cloudflare Web Analytics after data appears.
 
 ## GitHub Actions
 

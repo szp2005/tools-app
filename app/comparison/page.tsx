@@ -1,10 +1,17 @@
+import type { Metadata } from "next";
 import { ComparisonBuilder } from "@/components/ComparisonBuilder";
 import { comparisonPages } from "@/lib/comparisonPages";
+import { buildSoftwareApplicationJsonLd } from "@/lib/seo";
 
-export const metadata = {
+const pageTitle = "AI Tool Comparison Builder | Tools App";
+const pageDescription =
+  "Compare AI tools by price, category, source, tags, and workflow fit, then export the comparison as Markdown or PDF.";
+const pageUrl = "https://tools.toolrouteai.com/comparison";
+const ogImage = "/og-comparison.png";
+
+export const metadata: Metadata = {
   title: "AI Tool Comparison Builder | Tools App",
-  description:
-    "Compare AI tools from the Tools App content index by price, category, rating, source, and tags.",
+  description: pageDescription,
   keywords: [
     "AI tool comparison",
     "AI tools",
@@ -12,11 +19,47 @@ export const metadata = {
     "solopreneur AI tools",
     "creator workflow tools",
   ],
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+    siteName: "Tools App",
+    images: [{ url: ogImage, width: 1200, height: 630 }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pageTitle,
+    description: pageDescription,
+    images: [ogImage],
+  },
 };
 
 export default function ComparisonPage() {
+  const structuredData = buildSoftwareApplicationJsonLd({
+    name: "AI Tool Comparison Builder",
+    url: pageUrl,
+    description: pageDescription,
+    applicationCategory: "BusinessApplication",
+    featureList: [
+      "AI tool autocomplete",
+      "Structured comparison matrix",
+      "Markdown export",
+      "PDF export",
+      "Zero-API-cost content index search",
+    ],
+    keywords: metadata.keywords as string[],
+  });
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="mx-auto flex w-full min-w-0 max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10">
         <section className="max-w-3xl">
           <h1 className="text-4xl font-semibold tracking-normal text-slate-950 sm:text-5xl">

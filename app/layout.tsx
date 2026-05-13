@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
+import Script from "next/script";
 import { SubscribeWidget } from "@/components/SubscribeWidget";
 import "./globals.css";
 
@@ -20,6 +21,11 @@ const description = "Optimize prompts, get weekly digests, save hours every week
 const googleSiteVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
   "ufpv__Iei4LAF7AAjhGwvgIeoncGze2Jmib95HVDNJw";
+const cloudflareWebAnalyticsToken =
+  process.env.NEXT_PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN ??
+  process.env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN ??
+  "";
+const shouldLoadCloudflareWebAnalytics = /^[a-f0-9]{32}$/i.test(cloudflareWebAnalyticsToken);
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tools.toolrouteai.com"),
@@ -108,6 +114,14 @@ export default function RootLayout({
             <SubscribeWidget variant="footer" source="footer" />
           </div>
         </footer>
+        {shouldLoadCloudflareWebAnalytics ? (
+          <Script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: cloudflareWebAnalyticsToken })}
+            strategy="afterInteractive"
+          />
+        ) : null}
       </body>
     </html>
   );

@@ -67,6 +67,11 @@ Required variables:
 - `TURNSTILE_SECRET_KEY`
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
 
+Optional variables:
+
+- `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
+- `NEXT_PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` — 32-character Cloudflare Web Analytics beacon token. The script is injected only when this is a valid token.
+
 ## Stack
 
 - Next.js 14 App Router
@@ -123,3 +128,4 @@ Production environment variables:
 - `BUTTONDOWN_API_KEY`
 - `TURNSTILE_SECRET_KEY`
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+- `NEXT_PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` (optional, Web Analytics beacon token)

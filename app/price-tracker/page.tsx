@@ -4,11 +4,13 @@ import { SubscribeWidget } from "@/components/SubscribeWidget";
 import { getTopPriceDecreases, getTopPriceIncreases } from "@/lib/priceChanges";
 import { getPriceTrackerRecords, getPriceTrackerStats } from "@/lib/priceTracker";
 import { getPriceTrackerSegmentRecords, priceTrackerSegments } from "@/lib/priceTrackerSegments";
+import { buildSoftwareApplicationJsonLd } from "@/lib/seo";
 
 const pageUrl = "https://tools.toolrouteai.com/price-tracker";
 const pageTitle = "AI Tool Price Tracker | Tools App";
 const pageDescription =
-  "Track AI tool pricing signals and recent pricing changes for ChatGPT, Claude, Midjourney, Copilot, and other creator tools.";
+  "Track verified AI tool pricing changes and indexed price signals for ChatGPT, Claude, Midjourney, Copilot, and creator workflow tools.";
+const ogImage = "/og-price-tracker.png";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -32,23 +34,41 @@ export const metadata: Metadata = {
     description: pageDescription,
     url: pageUrl,
     siteName: "Tools App",
-    images: [{ url: "/og-default.png", width: 1200, height: 630 }],
+    images: [{ url: ogImage, width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
-    images: ["/og-default.png"],
+    images: [ogImage],
   },
 };
 
 export default function PriceTrackerPage() {
   const records = getPriceTrackerRecords();
   const stats = getPriceTrackerStats(records);
+  const structuredData = buildSoftwareApplicationJsonLd({
+    name: "AI Tool Price Tracker",
+    url: pageUrl,
+    description: pageDescription,
+    applicationCategory: "BusinessApplication",
+    featureList: [
+      "AI tool price signal index",
+      "Recent price increase and decrease lists",
+      "RSS feed",
+      "Machine-readable JSON feeds",
+      "Newsletter alert entrypoint",
+    ],
+    keywords: metadata.keywords as string[],
+  });
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10">
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
           <div className="max-w-3xl">

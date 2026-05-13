@@ -3,10 +3,12 @@ import { SubscribeWidget } from "@/components/SubscribeWidget";
 import type { Metadata } from "next";
 import { buildGuidesByScenario, obsidianTemplatePageUrl } from "./pageData";
 import { ScenarioLinkRail } from "./ScenarioLinkRail";
+import { buildSoftwareApplicationJsonLd } from "@/lib/seo";
 
 const pageTitle = "Free Obsidian Template Generator | Tools App";
 const pageDescription =
-  "Generate practical Obsidian Markdown template packs for research, projects, reading notes, creative workflows, and PKM systems.";
+  "Generate downloadable Obsidian template packs for research, projects, reading notes, creative workflows, Dataview, and Templater.";
+const ogImage = "/og-obsidian-templates.png";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -26,14 +28,14 @@ export const metadata: Metadata = {
     description: pageDescription,
     url: obsidianTemplatePageUrl,
     siteName: "Tools App",
-    images: [{ url: "/og-default.png", width: 1200, height: 630 }],
+    images: [{ url: ogImage, width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
-    images: ["/og-default.png"],
+    images: [ogImage],
   },
 };
 
@@ -72,19 +74,20 @@ function buildStructuredData() {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "WebApplication",
+      buildSoftwareApplicationJsonLd({
         name: "Obsidian Template Generator",
         url: obsidianTemplatePageUrl,
         applicationCategory: "ProductivityApplication",
-        operatingSystem: "Web",
         description: pageDescription,
-        offers: {
-          "@type": "Offer",
-          price: "0",
-          priceCurrency: "USD",
-        },
-      },
+        featureList: [
+          "Scenario-based Obsidian template packs",
+          "Pure Markdown templates",
+          "Dataview-friendly templates",
+          "Templater-friendly templates",
+          "Browser-side ZIP download",
+        ],
+        keywords: ["Obsidian templates", "Dataview templates", "Templater templates", "PKM workflow"],
+      }),
       {
         "@type": "BreadcrumbList",
         itemListElement: [
