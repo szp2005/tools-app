@@ -21,6 +21,9 @@ const baseUrl = (process.env.SMOKE_BASE_URL ?? "https://tools.toolrouteai.com").
 const resolveIp = process.env.SMOKE_RESOLVE_IP?.trim();
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS ?? "15000");
 const canonicalBaseUrl = "https://tools.toolrouteai.com";
+const userAgent =
+  process.env.SMOKE_USER_AGENT ??
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 const blogArticles = getBlogArticles();
 const expectedSitemapUrls = [
   canonicalBaseUrl,
@@ -270,8 +273,11 @@ function request(method: "GET" | "POST", pathname: string, jsonBody?: unknown): 
   const body = jsonBody ? JSON.stringify(jsonBody) : undefined;
   const transport = url.protocol === "http:" ? http : https;
   const headers: Record<string, string> = {
-    "user-agent": "tools-app-smoke/1.0",
+    "user-agent": userAgent,
     accept: "application/json,text/html,application/xml,text/xml,*/*",
+    "accept-language": "en-US,en;q=0.9",
+    "cache-control": "no-cache",
+    pragma: "no-cache",
   };
 
   if (body) {
