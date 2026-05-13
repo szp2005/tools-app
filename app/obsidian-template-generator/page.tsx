@@ -1,11 +1,12 @@
 import { ObsidianTemplateGenerator } from "@/components/ObsidianTemplateGenerator";
+import { SubscribeWidget } from "@/components/SubscribeWidget";
 import type { Metadata } from "next";
 import { buildGuidesByScenario, obsidianTemplatePageUrl } from "./pageData";
 import { ScenarioLinkRail } from "./ScenarioLinkRail";
 
 const pageTitle = "Free Obsidian Template Generator | Tools App";
 const pageDescription =
-  "Generate practical Obsidian Markdown template packs for research, projects, reading notes, and PKM workflows.";
+  "Generate practical Obsidian Markdown template packs for research, projects, reading notes, creative workflows, and PKM systems.";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -51,8 +52,12 @@ export default function ObsidianTemplateGeneratorPage() {
             Obsidian Template Generator
           </h1>
           <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">
-            Pick a workflow and download a clean Markdown template pack for your vault.
+            Pick a workflow and preference, then download a clean Obsidian .zip pack for your vault.
           </p>
+        </section>
+
+        <section className="max-w-3xl rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <SubscribeWidget variant="inline" source="tool" />
         </section>
 
         <ScenarioLinkRail />

@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 type SourceSite = "ai-tools-pro" | "home-office-gear" | "notes-automate" | "pkm-insights";
-type Scenario = "academic" | "project" | "reading";
+type Scenario = "academic" | "project" | "reading" | "creative";
 
 type SiteConfig = {
   slug: SourceSite;
@@ -32,16 +32,6 @@ const workspaceRoot = path.resolve(toolsAppRoot, "..");
 const outputPath = path.join(toolsAppRoot, "data", "obsidian-index.json");
 
 const sites: SiteConfig[] = [
-  {
-    slug: "ai-tools-pro",
-    baseUrl: "https://ai.toolrouteai.com",
-    postsDir: path.join(workspaceRoot, "ai-tools-pro", "content", "posts"),
-  },
-  {
-    slug: "home-office-gear",
-    baseUrl: "https://gear.toolrouteai.com",
-    postsDir: path.join(workspaceRoot, "home-office-gear", "content", "posts"),
-  },
   {
     slug: "notes-automate",
     baseUrl: "https://notes-automate.com",
@@ -80,6 +70,7 @@ const scenarioSignals: Record<Scenario, string[]> = {
   academic: ["research", "academic", "citation", "zotero", "mendeley", "literature", "paper", "source", "synthesis"],
   project: ["project", "task", "workflow", "automation", "n8n", "webhook", "dashboard", "daily notes", "para method"],
   reading: ["reading", "book", "writing", "zettelkasten", "pkm", "knowledge", "idea", "long-form", "longform"],
+  creative: ["creative", "creator", "content", "writing", "newsletter", "publish", "draft", "idea", "youtube"],
 };
 
 async function main() {

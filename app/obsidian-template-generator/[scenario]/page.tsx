@@ -91,7 +91,7 @@ export default function ObsidianTemplateScenarioPage({ params }: ScenarioPagePro
             <div>
               <h2 className="text-xl font-semibold text-slate-950">Files in this pack</h2>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Download the whole pack or grab individual Markdown files from the generator above.
+                Download the whole .zip pack or grab individual Markdown files from the generator above.
               </p>
               <ul className="mt-4 grid gap-2 text-sm text-slate-700">
                 {scenario.files.map((filename) => (

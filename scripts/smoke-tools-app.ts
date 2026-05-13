@@ -25,8 +25,8 @@ const expectedSitemapUrls = [
   `${canonicalBaseUrl}/prompt-optimizer`,
   `${canonicalBaseUrl}/comparison`,
   ...comparisonPages.map((page) => `${canonicalBaseUrl}/comparison/${page.slug}`),
-  `${canonicalBaseUrl}/obsidian-template-generator`,
-  ...obsidianScenarios.map((scenario) => `${canonicalBaseUrl}/obsidian-template-generator/${scenario.id}`),
+  `${canonicalBaseUrl}/obsidian-templates`,
+  ...obsidianScenarios.map((scenario) => `${canonicalBaseUrl}/obsidian-templates/${scenario.id}`),
   `${canonicalBaseUrl}/price-tracker`,
   ...priceTrackerSegments.map((segment) => `${canonicalBaseUrl}/price-tracker/${segment.slug}`),
 ];
@@ -88,9 +88,9 @@ const checks: SmokeCheck[] = [
   {
     name: "obsidian template page",
     run: async () => {
-      const response = await request("GET", "/obsidian-template-generator");
+      const response = await request("GET", "/obsidian-templates");
       assertStatus(response, 200);
-      assertContains(response.body, ["Obsidian Template Generator"]);
+      assertContains(response.body, ["Obsidian Template Generator", "Download .zip"]);
       return "HTTP 200";
     },
   },

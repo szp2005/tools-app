@@ -61,7 +61,7 @@ export default function RootLayout({
               <Link href="/comparison" className="transition hover:text-slate-950">
                 Comparison
               </Link>
-              <Link href="/obsidian-template-generator" className="transition hover:text-slate-950">
+              <Link href="/obsidian-templates" className="transition hover:text-slate-950">
                 Obsidian Templates
               </Link>
               <Link href="/price-tracker" className="transition hover:text-slate-950">
@@ -85,7 +85,7 @@ export default function RootLayout({
                 <Link href="/comparison" className="transition hover:text-slate-950">
                   Comparison
                 </Link>
-                <Link href="/obsidian-template-generator" className="transition hover:text-slate-950">
+                <Link href="/obsidian-templates" className="transition hover:text-slate-950">
                   Obsidian Templates
                 </Link>
                 <Link href="/price-tracker" className="transition hover:text-slate-950">

@@ -18,7 +18,7 @@ const toolCards = [
     name: "Obsidian Template Generator",
     description: "Generate practical templates for notes, projects, and PKM workflows.",
     status: "Available",
-    href: "/obsidian-template-generator",
+    href: "/obsidian-templates",
   },
   {
     name: "Price Tracker",
@@ -32,17 +32,22 @@ const obsidianScenarioLinks = [
   {
     name: "Academic research templates",
     description: "Literature notes, research dashboards, and synthesis workflows.",
-    href: "/obsidian-template-generator/academic",
+    href: "/obsidian-templates/academic",
   },
   {
     name: "Project management templates",
     description: "Project dashboards, decision logs, weekly reviews, and operator workflows.",
-    href: "/obsidian-template-generator/project",
+    href: "/obsidian-templates/project",
   },
   {
     name: "Reading notes templates",
     description: "Book notes, article capture, and idea distillation for creators.",
-    href: "/obsidian-template-generator/reading",
+    href: "/obsidian-templates/reading",
+  },
+  {
+    name: "Creative workflow templates",
+    description: "Idea capture, draft briefs, publishing checklists, and retrospectives.",
+    href: "/obsidian-templates/creative",
   },
 ];
 
@@ -116,14 +121,14 @@ export default function Home() {
                 </p>
               </div>
               <Link
-                href="/obsidian-template-generator"
+                href="/obsidian-templates"
                 className="text-sm font-semibold text-slate-600 transition hover:text-slate-950"
               >
                 Open generator
               </Link>
             </div>
 
-            <div className="mt-5 grid gap-3 md:grid-cols-3">
+            <div className="mt-5 grid gap-3 md:grid-cols-4">
               {obsidianScenarioLinks.map((scenario) => (
                 <Link
                   key={scenario.href}

@@ -2,6 +2,7 @@ import obsidianIndex from "@/data/obsidian-index.json";
 import toolsIndex from "@/data/tools-index.json";
 import { comparisonPages } from "./comparisonPages";
 import type { ToolIndexRecord } from "./comparison";
+import { obsidianScenarios } from "./obsidianTemplates";
 import { getPriceTrackerRecords, getPriceTrackerStats } from "./priceTracker";
 import { priceTrackerSegments } from "./priceTrackerSegments";
 
@@ -56,7 +57,7 @@ export function buildSiteHealthPayload(generatedAt = new Date()): SiteHealthPayl
     tools: [
       { name: "Prompt Optimizer", path: "/prompt-optimizer", status: "available" },
       { name: "Comparison Builder", path: "/comparison", status: "available" },
-      { name: "Obsidian Template Generator", path: "/obsidian-template-generator", status: "available" },
+      { name: "Obsidian Template Generator", path: "/obsidian-templates", status: "available" },
       { name: "Price Tracker", path: "/price-tracker", status: "available" },
     ],
     indexes: {
@@ -72,7 +73,7 @@ export function buildSiteHealthPayload(generatedAt = new Date()): SiteHealthPayl
     seo_pages: {
       comparison_pairs: comparisonPages.length,
       price_segments: priceTrackerSegments.length,
-      obsidian_scenarios: 3,
+      obsidian_scenarios: obsidianScenarios.length,
     },
     machine_feeds: {
       price_tracker_rss: `${siteUrl}/price-tracker/feed.xml`,

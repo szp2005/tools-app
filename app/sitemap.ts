@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { comparisonPages } from "@/lib/comparisonPages";
+import { obsidianScenarios } from "@/lib/obsidianTemplates";
 import { priceTrackerSegments } from "@/lib/priceTrackerSegments";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -26,7 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     })),
     {
-      url: `${base}/obsidian-template-generator`,
+      url: `${base}/obsidian-templates`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
@@ -37,24 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    {
-      url: `${base}/obsidian-template-generator/academic`,
+    ...obsidianScenarios.map((scenario) => ({
+      url: `${base}/obsidian-templates/${scenario.id}`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 0.7,
-    },
-    {
-      url: `${base}/obsidian-template-generator/project`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${base}/obsidian-template-generator/reading`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
+    })),
     ...priceTrackerSegments.map((segment) => ({
       url: `${base}/price-tracker/${segment.slug}`,
       lastModified: new Date(),

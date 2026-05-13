@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { obsidianScenarioPages } from "./pageData";
-import type { ObsidianScenarioId } from "@/lib/obsidianTemplates";
+import { obsidianScenarios, type ObsidianScenarioId } from "@/lib/obsidianTemplates";
 
-const scenarioOrder: ObsidianScenarioId[] = ["academic", "project", "reading"];
+const scenarioOrder: ObsidianScenarioId[] = obsidianScenarios.map((scenario) => scenario.id);
 
 type ScenarioLinkRailProps = {
   activeScenarioId?: ObsidianScenarioId;
@@ -19,14 +19,14 @@ export function ScenarioLinkRail({ activeScenarioId }: ScenarioLinkRailProps) {
           </p>
         </div>
         <Link
-          href="/obsidian-template-generator"
+          href="/obsidian-templates"
           className="text-sm font-semibold text-slate-600 transition hover:text-slate-950"
         >
           All templates
         </Link>
       </div>
 
-      <div className="mt-5 grid gap-3 md:grid-cols-3">
+      <div className="mt-5 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {scenarioOrder.map((scenarioId) => {
           const page = obsidianScenarioPages[scenarioId];
           const isActive = scenarioId === activeScenarioId;
@@ -34,7 +34,7 @@ export function ScenarioLinkRail({ activeScenarioId }: ScenarioLinkRailProps) {
           return (
             <Link
               key={scenarioId}
-              href={`/obsidian-template-generator/${scenarioId}`}
+              href={`/obsidian-templates/${scenarioId}`}
               aria-current={isActive ? "page" : undefined}
               className={`rounded-lg border p-4 transition ${
                 isActive

@@ -4,25 +4,34 @@ import {
   buildObsidianTemplateFiles,
   buildObsidianTemplatePack,
   createTemplateFilename,
+  createTemplateZipFilename,
   obsidianScenarios,
 } from "@/lib/obsidianTemplates";
+import { createStoredZipBlob } from "@/lib/zip";
 
 describe("obsidian template pack", () => {
-  it("exposes three scenarios", () => {
-    assert.equal(obsidianScenarios.length, 3);
+  it("exposes four scenarios", () => {
+    assert.deepEqual(obsidianScenarios.map((scenario) => scenario.id), [
+      "academic",
+      "project",
+      "reading",
+      "creative",
+    ]);
   });
 
-  it("builds an academic pack with three file blocks", () => {
+  it("builds an academic pack with at least five file blocks", () => {
     const pack = buildObsidianTemplatePack({
       scenarioId: "academic",
       vaultName: "Research Lab",
-      detailLevel: "guided",
+      preference: "dataview",
     });
 
-    assert.match(pack, /File: research-dashboard\.md/);
-    assert.match(pack, /File: literature-note\.md/);
-    assert.match(pack, /File: synthesis-note\.md/);
+    assert.match(pack, /File: 00-Dashboard\/research-dashboard\.md/);
+    assert.match(pack, /File: 01-Sources\/literature-note\.md/);
+    assert.match(pack, /File: 02-Synthesis\/synthesis-note\.md/);
     assert.match(pack, /Vault: Research Lab/);
+    assert.match(pack, /```dataview/);
+    assert.ok((pack.match(/File: /g) ?? []).length >= 5);
   });
 
   it("creates a safe markdown filename", () => {
@@ -30,9 +39,17 @@ describe("obsidian template pack", () => {
       createTemplateFilename({
         scenarioId: "reading",
         vaultName: "Creator Notes!",
-        detailLevel: "lean",
+        preference: "markdown",
       }),
-      "reading-notes-creator-notes-template-pack.md",
+      "reading-notes-creator-notes-markdown-template-pack.md",
+    );
+    assert.equal(
+      createTemplateZipFilename({
+        scenarioId: "reading",
+        vaultName: "Creator Notes!",
+        preference: "markdown",
+      }),
+      "reading-notes-creator-notes-markdown-template-pack.zip",
     );
   });
 
@@ -40,14 +57,30 @@ describe("obsidian template pack", () => {
     const files = buildObsidianTemplateFiles({
       scenarioId: "project",
       vaultName: "Ops",
-      detailLevel: "lean",
+      preference: "templater",
     });
 
-    assert.deepEqual(files.map((file) => file.filename), [
-      "project-dashboard.md",
-      "decision-log.md",
-      "weekly-review.md",
+    assert.ok(files.length >= 5);
+    assert.deepEqual(files.map((file) => file.filename).slice(0, 3), [
+      "README.md",
+      "00-Dashboard/project-dashboard.md",
+      "01-Planning/project-brief.md",
     ]);
-    assert.match(files[0].body, /# Ops project dashboard/);
+    assert.match(files[1].body, /# Ops project dashboard/);
+    assert.match(files[1].body, /<% tp\.date\.now\("YYYY-MM-DD"\) %>/);
+  });
+
+  it("creates a browser zip blob from template files", async () => {
+    const files = buildObsidianTemplateFiles({
+      scenarioId: "creative",
+      vaultName: "Studio",
+      preference: "markdown",
+    });
+    const blob = createStoredZipBlob(files);
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+
+    assert.ok(files.length >= 5);
+    assert.equal(blob.type, "application/zip");
+    assert.deepEqual(Array.from(bytes.slice(0, 4)), [0x50, 0x4b, 0x03, 0x04]);
   });
 });

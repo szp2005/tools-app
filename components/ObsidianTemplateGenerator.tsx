@@ -6,9 +6,13 @@ import {
   buildObsidianTemplateFiles,
   buildObsidianTemplatePack,
   createTemplateFilename,
+  createTemplateZipFilename,
+  obsidianPreferences,
   obsidianScenarios,
   type ObsidianScenarioId,
+  type ObsidianPreference,
 } from "@/lib/obsidianTemplates";
+import { createStoredZipBlob } from "@/lib/zip";
 
 const downloadCountKey = "obsidian_template_downloads";
 
@@ -31,17 +35,17 @@ export function ObsidianTemplateGenerator({
 }: ObsidianTemplateGeneratorProps) {
   const [scenarioId, setScenarioId] = useState<ObsidianScenarioId>(initialScenarioId);
   const [vaultName, setVaultName] = useState("Solo OS");
-  const [detailLevel, setDetailLevel] = useState<"lean" | "guided">("guided");
+  const [preference, setPreference] = useState<ObsidianPreference>("markdown");
   const [copied, setCopied] = useState(false);
   const [downloadCount, setDownloadCount] = useState(0);
 
   const pack = useMemo(
-    () => buildObsidianTemplatePack({ scenarioId, vaultName, detailLevel }),
-    [detailLevel, scenarioId, vaultName],
+    () => buildObsidianTemplatePack({ scenarioId, vaultName, preference }),
+    [preference, scenarioId, vaultName],
   );
   const templateFiles = useMemo(
-    () => buildObsidianTemplateFiles({ scenarioId, vaultName, detailLevel }),
-    [detailLevel, scenarioId, vaultName],
+    () => buildObsidianTemplateFiles({ scenarioId, vaultName, preference }),
+    [preference, scenarioId, vaultName],
   );
   const relatedGuides = guidesByScenario[scenarioId] ?? [];
 
@@ -66,12 +70,26 @@ export function ObsidianTemplateGenerator({
   }
 
   function downloadPack() {
+    const zipBlob = createStoredZipBlob(templateFiles);
+    const url = window.URL.createObjectURL(zipBlob);
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = createTemplateZipFilename({ scenarioId, vaultName, preference });
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.URL.revokeObjectURL(url);
+    recordDownload();
+  }
+
+  function downloadMarkdownPack() {
     const blob = new Blob([pack], { type: "text/markdown;charset=utf-8" });
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement("a");
 
     anchor.href = url;
-    anchor.download = createTemplateFilename({ scenarioId, vaultName, detailLevel });
+    anchor.download = createTemplateFilename({ scenarioId, vaultName, preference });
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
@@ -110,7 +128,7 @@ export function ObsidianTemplateGenerator({
           <div>
             <h2 className="text-base font-semibold text-slate-950">Choose a workflow</h2>
             <p className="mt-1 text-sm leading-6 text-slate-600">
-              Start with a scenario, then download a ready-to-paste Markdown pack.
+              Start with a scenario, then download a ready-to-import Obsidian folder pack.
             </p>
           </div>
 
@@ -159,22 +177,25 @@ export function ObsidianTemplateGenerator({
           />
 
           <div className="mt-5">
-            <p className="text-sm font-medium text-slate-700">Detail level</p>
-            <div className="mt-2 inline-flex rounded-md border border-slate-300 bg-slate-50 p-1">
-              {(["guided", "lean"] as const).map((level) => (
+            <p className="text-sm font-medium text-slate-700">Template preference</p>
+            <div className="mt-2 grid gap-2">
+              {obsidianPreferences.map((item) => (
                 <button
-                  key={level}
+                  key={item.id}
                   type="button"
-                  data-testid={`detail-${level}`}
-                  aria-pressed={detailLevel === level}
-                  onClick={() => setDetailLevel(level)}
-                  className={`min-h-9 rounded px-4 text-sm font-semibold capitalize transition ${
-                    detailLevel === level
+                  data-testid={`preference-${item.id}`}
+                  aria-pressed={preference === item.id}
+                  onClick={() => setPreference(item.id)}
+                  className={`rounded-md border px-4 py-3 text-left transition ${
+                    preference === item.id
                       ? "bg-slate-950 text-white"
-                      : "text-slate-600 hover:bg-white hover:text-slate-950"
+                      : "border-slate-200 bg-white text-slate-950 hover:border-slate-300 hover:bg-slate-50"
                   }`}
                 >
-                  {level}
+                  <span className="block text-sm font-semibold">{item.name}</span>
+                  <span className={`mt-1 block text-xs leading-5 ${preference === item.id ? "text-slate-200" : "text-slate-600"}`}>
+                    {item.description}
+                  </span>
                 </button>
               ))}
             </div>
@@ -241,11 +262,18 @@ export function ObsidianTemplateGenerator({
             </button>
             <button
               type="button"
+              onClick={downloadMarkdownPack}
+              className="min-h-10 rounded-md border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:text-slate-950"
+            >
+              Download .md
+            </button>
+            <button
+              type="button"
               data-testid="download-template-pack"
               onClick={downloadPack}
               className="min-h-10 rounded-md bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-slate-800"
             >
-              Download .md pack
+              Download .zip
             </button>
           </div>
         </div>

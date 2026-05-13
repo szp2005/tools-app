@@ -1,7 +1,7 @@
 import obsidianIndex from "@/data/obsidian-index.json";
-import type { ObsidianScenarioId } from "@/lib/obsidianTemplates";
+import { obsidianScenarios, type ObsidianScenarioId } from "@/lib/obsidianTemplates";
 
-export const obsidianTemplatePageUrl = "https://tools.toolrouteai.com/obsidian-template-generator";
+export const obsidianTemplatePageUrl = "https://tools.toolrouteai.com/obsidian-templates";
 
 export const obsidianScenarioPages: Record<
   ObsidianScenarioId,
@@ -77,6 +77,26 @@ export const obsidianScenarioPages: Record<
       },
     ],
   },
+  creative: {
+    title: "Creative Workflow Obsidian Templates | Tools App",
+    heading: "Creative Workflow Obsidian Templates",
+    description:
+      "Download Obsidian Markdown templates for idea capture, draft briefs, publishing checklists, and creative retrospectives.",
+    url: `${obsidianTemplatePageUrl}/creative`,
+    image: "/og-default.png",
+    faq: [
+      {
+        question: "What is included in the creative workflow pack?",
+        answer:
+          "The pack includes a creative dashboard, idea capture note, draft brief, publishing checklist, and retrospective template.",
+      },
+      {
+        question: "Can I use the pack for newsletters or video scripts?",
+        answer:
+          "Yes. The templates are intentionally channel-neutral, so they work for newsletters, blog posts, videos, or social content.",
+      },
+    ],
+  },
 };
 
 export type ObsidianIndexRecord = {
@@ -90,11 +110,11 @@ export type ObsidianIndexRecord = {
 };
 
 export function isObsidianScenarioId(value: string | undefined): value is ObsidianScenarioId {
-  return value === "academic" || value === "project" || value === "reading";
+  return obsidianScenarios.some((scenario) => scenario.id === value);
 }
 
 export function buildGuidesByScenario() {
-  const scenarios: ObsidianScenarioId[] = ["academic", "project", "reading"];
+  const scenarios: ObsidianScenarioId[] = obsidianScenarios.map((scenario) => scenario.id);
 
   return Object.fromEntries(
     scenarios.map((scenario) => [

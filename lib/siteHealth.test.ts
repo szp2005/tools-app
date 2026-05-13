@@ -17,7 +17,8 @@ describe("site health payload", () => {
     assert.ok(payload.indexes.price_tracker.total >= 200);
     assert.equal(payload.seo_pages.comparison_pairs, 4);
     assert.equal(payload.seo_pages.price_segments, 5);
-    assert.equal(payload.seo_pages.obsidian_scenarios, 3);
+    assert.equal(payload.seo_pages.obsidian_scenarios, 4);
+    assert.equal(payload.tools[2].path, "/obsidian-templates");
     assert.match(payload.machine_feeds.price_tracker_rss, /feed\.xml$/);
     assert.match(payload.machine_feeds.price_tracker_json, /index\.json$/);
   });
