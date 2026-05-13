@@ -10,7 +10,7 @@ Repository: <https://github.com/szp2005/tools-app>
 
 Tools App is now a production-ready public tools hub for the one-person-company portfolio.
 
-It has four usable tools, content-backed SEO pages, machine-readable feeds, newsletter integration, production smoke checks, GitHub Actions verification, and an operations runbook.
+It has five usable tools, content-backed SEO pages, machine-readable feeds, newsletter integration, production smoke checks, GitHub Actions verification, and an operations runbook.
 
 ## Live Tools
 
@@ -20,6 +20,7 @@ It has four usable tools, content-backed SEO pages, machine-readable feeds, news
 | Comparison Builder | `/comparison` | Live, zero LLM cost, Markdown/PDF export |
 | Obsidian Template Generator | `/obsidian-template-generator` | Live, browser-only Markdown packs |
 | AI Tool Price Tracker | `/price-tracker` | Live, metadata tracker with RSS/JSON/CSV |
+| Side Hustle Ideas | `/side-hustle-ideas` | Live, Turnstile-protected, KV rate-limited |
 
 ## Data Assets
 
@@ -38,6 +39,8 @@ Main tool pages:
 - `/comparison`
 - `/obsidian-template-generator`
 - `/price-tracker`
+- `/side-hustle-ideas`
+- `/blog`
 
 Comparison long-tail pages:
 
@@ -45,6 +48,29 @@ Comparison long-tail pages:
 - `/comparison/notion-vs-obsidian`
 - `/comparison/n8n-vs-zapier`
 - `/comparison/zotero-vs-mendeley`
+- `/comparison/claude-3-5-sonnet-vs-gpt-4o`
+- `/comparison/custom-gpt-vs-claude-projects`
+- `/comparison/copy-ai-vs-jasper`
+- `/comparison/rytr-vs-copy-ai`
+- `/comparison/make-vs-zapier`
+- `/comparison/adobe-firefly-vs-canva-magic-studio`
+- `/comparison/stable-diffusion-vs-midjourney`
+- `/comparison/perplexity-ai-vs-chatgpt`
+- `/comparison/grammarly-vs-prowritingaid`
+- `/comparison/logseq-vs-heptabase`
+- `/comparison/heptabase-vs-scrintal`
+- `/comparison/obsidian-canvas-vs-excalidraw`
+- `/comparison/obsidian-dataview-vs-templater`
+- `/comparison/n8n-obsidian-automation-vs-manual-notes`
+- `/comparison/elevenlabs-vs-play-ht`
+
+Blog tutorial pages:
+
+- `/blog/how-to-use-prompt-optimizer-effectively`
+- `/blog/ai-tool-comparison-guide-for-solopreneurs`
+- `/blog/obsidian-template-best-practices`
+- `/blog/ai-tool-price-monitoring-strategy`
+- `/blog/finding-the-right-side-hustle-with-ai`
 
 Obsidian scenario pages:
 
@@ -86,9 +112,10 @@ Closeout health shape (abbreviated):
     "price_tracker": { "total": 211, "free": 102, "monthly": 37, "enterprise": 3, "sources": 4 }
   },
   "seo_pages": {
-    "comparison_pairs": 4,
+    "comparison_pairs": 19,
     "price_segments": 5,
-    "obsidian_scenarios": 3
+    "obsidian_scenarios": 4,
+    "blog_articles": 5
   }
 }
 ```
@@ -123,6 +150,8 @@ Local full verification:
 npm run test:comparison
 npm run test:price-tracker
 npm run test:health
+npm run test:blog
+npm run test:side-hustle
 npm run test:templates
 npm run lint
 npm run build
@@ -138,7 +167,7 @@ SMOKE_RESOLVE_IP=104.21.50.114 npm run smoke:prod
 Closeout smoke expectation:
 
 ```text
-Summary: 13/13 passed
+Summary: 17/17 passed
 ```
 
 GitHub Actions:
@@ -165,7 +194,7 @@ Use it for:
 
 - Price Tracker is not a live crawler.
 - Price metadata can drift from vendor reality.
-- Comparison long-tail pages are intentionally limited to high-confidence pairs.
+- Comparison long-tail pages are intentionally limited to curated pairs with indexed source coverage.
 - Manual `wrangler pages deploy` requires `CLOUDFLARE_API_TOKEN`.
 - `og-default.png` remains a generic placeholder and can be improved later.
 

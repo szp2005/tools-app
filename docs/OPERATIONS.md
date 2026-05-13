@@ -40,6 +40,21 @@ SEO index pages:
   - `/comparison/notion-vs-obsidian`
   - `/comparison/n8n-vs-zapier`
   - `/comparison/zotero-vs-mendeley`
+  - `/comparison/claude-3-5-sonnet-vs-gpt-4o`
+  - `/comparison/custom-gpt-vs-claude-projects`
+  - `/comparison/copy-ai-vs-jasper`
+  - `/comparison/rytr-vs-copy-ai`
+  - `/comparison/make-vs-zapier`
+  - `/comparison/adobe-firefly-vs-canva-magic-studio`
+  - `/comparison/stable-diffusion-vs-midjourney`
+  - `/comparison/perplexity-ai-vs-chatgpt`
+  - `/comparison/grammarly-vs-prowritingaid`
+  - `/comparison/logseq-vs-heptabase`
+  - `/comparison/heptabase-vs-scrintal`
+  - `/comparison/obsidian-canvas-vs-excalidraw`
+  - `/comparison/obsidian-dataview-vs-templater`
+  - `/comparison/n8n-obsidian-automation-vs-manual-notes`
+  - `/comparison/elevenlabs-vs-play-ht`
 - Obsidian scenario pages:
   - `/obsidian-templates/academic`
   - `/obsidian-templates/project`
@@ -83,7 +98,7 @@ SMOKE_RESOLVE_IP=104.21.50.114 npm run smoke:prod
 Expected production smoke result at project close:
 
 ```text
-Summary: 16/16 passed
+Summary: 17/17 passed
 ```
 
 ## Deployment
@@ -276,7 +291,7 @@ Expected: JSON array with at least one result.
 
 - Price Tracker is a metadata tracker, not a live crawler.
 - Price fields come from article frontmatter and snippets; users should verify vendor pages before purchase.
-- Comparison static pages intentionally use a short, high-confidence list of pairs to avoid thin or misleading pages.
+- Comparison static pages intentionally use a curated, high-confidence list of pairs with indexed source coverage, decision copy, and FAQ schema to avoid thin or misleading pages.
 - Manual `wrangler pages deploy` needs `CLOUDFLARE_API_TOKEN` in the local shell.
 - GitHub Actions status was not checked locally because the `gh` CLI is not installed on this machine.
 

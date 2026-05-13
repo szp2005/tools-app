@@ -29,6 +29,21 @@ Comparison index pages:
 - [Notion vs Obsidian](https://tools.toolrouteai.com/comparison/notion-vs-obsidian)
 - [n8n vs Zapier](https://tools.toolrouteai.com/comparison/n8n-vs-zapier)
 - [Zotero vs Mendeley](https://tools.toolrouteai.com/comparison/zotero-vs-mendeley)
+- [Claude 3.5 Sonnet vs GPT-4o](https://tools.toolrouteai.com/comparison/claude-3-5-sonnet-vs-gpt-4o)
+- [Custom GPT vs Claude Projects](https://tools.toolrouteai.com/comparison/custom-gpt-vs-claude-projects)
+- [Copy AI vs Jasper](https://tools.toolrouteai.com/comparison/copy-ai-vs-jasper)
+- [Rytr vs Copy AI](https://tools.toolrouteai.com/comparison/rytr-vs-copy-ai)
+- [Make vs Zapier](https://tools.toolrouteai.com/comparison/make-vs-zapier)
+- [Adobe Firefly vs Canva Magic Studio](https://tools.toolrouteai.com/comparison/adobe-firefly-vs-canva-magic-studio)
+- [Stable Diffusion vs Midjourney](https://tools.toolrouteai.com/comparison/stable-diffusion-vs-midjourney)
+- [Perplexity AI vs ChatGPT](https://tools.toolrouteai.com/comparison/perplexity-ai-vs-chatgpt)
+- [Grammarly vs ProWritingAid](https://tools.toolrouteai.com/comparison/grammarly-vs-prowritingaid)
+- [Logseq vs Heptabase](https://tools.toolrouteai.com/comparison/logseq-vs-heptabase)
+- [Heptabase vs Scrintal](https://tools.toolrouteai.com/comparison/heptabase-vs-scrintal)
+- [Obsidian Canvas vs Excalidraw](https://tools.toolrouteai.com/comparison/obsidian-canvas-vs-excalidraw)
+- [Obsidian Dataview vs Templater](https://tools.toolrouteai.com/comparison/obsidian-dataview-vs-templater)
+- [n8n Obsidian Automation vs Manual Notes](https://tools.toolrouteai.com/comparison/n8n-obsidian-automation-vs-manual-notes)
+- [ElevenLabs vs Play.ht](https://tools.toolrouteai.com/comparison/elevenlabs-vs-play-ht)
 
 Price Tracker index pages:
 

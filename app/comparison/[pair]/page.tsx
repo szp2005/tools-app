@@ -57,7 +57,7 @@ export default function ComparisonPairPage({ params }: ComparisonPairPageProps) 
   }
 
   const comparison = buildStaticComparisonPage(page);
-  const structuredData = buildComparisonStructuredData(page.slug, page.heading, page.description);
+  const structuredData = buildComparisonStructuredData(page);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -141,6 +141,56 @@ export default function ComparisonPairPage({ params }: ComparisonPairPageProps) 
           </table>
         </section>
 
+        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-2xl font-semibold tracking-normal text-slate-950">How to choose</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
+              {page.summary}
+            </p>
+
+            <div className="mt-6 grid gap-5">
+              {page.decisionGuide.map((section) => (
+                <article key={section.heading} className="border-t border-slate-200 pt-5">
+                  <h3 className="text-lg font-semibold text-slate-950">{section.heading}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{section.body}</p>
+                  <ul className="mt-3 grid gap-2 text-sm leading-6 text-slate-700">
+                    {section.bullets.map((bullet) => (
+                      <li key={bullet} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-600" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <aside className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:self-start">
+            <h2 className="text-lg font-semibold text-slate-950">Best for</h2>
+            <ul className="mt-4 grid gap-3 text-sm leading-6 text-slate-700">
+              {page.bestFor.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </section>
+
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="text-2xl font-semibold tracking-normal text-slate-950">FAQ</h2>
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            {page.faqs.map((faq) => (
+              <article key={faq.question} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <h3 className="text-base font-semibold text-slate-950">{faq.question}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{faq.answer}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <h2 className="text-lg font-semibold text-slate-950">Build another comparison</h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -158,17 +208,17 @@ export default function ComparisonPairPage({ params }: ComparisonPairPageProps) 
   );
 }
 
-function buildComparisonStructuredData(slug: string, heading: string, description: string) {
-  const url = `${comparisonBaseUrl}/${slug}`;
+function buildComparisonStructuredData(page: NonNullable<ReturnType<typeof getComparisonPage>>) {
+  const url = `${comparisonBaseUrl}/${page.slug}`;
 
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebPage",
-        name: heading,
+        name: page.heading,
         url,
-        description,
+        description: page.description,
         isPartOf: {
           "@type": "WebSite",
           name: "Tools App",
@@ -193,10 +243,21 @@ function buildComparisonStructuredData(slug: string, heading: string, descriptio
           {
             "@type": "ListItem",
             position: 3,
-            name: heading,
+            name: page.heading,
             item: url,
           },
         ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: page.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
       },
     ],
   };

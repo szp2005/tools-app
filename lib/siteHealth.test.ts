@@ -16,7 +16,7 @@ describe("site health payload", () => {
     assert.equal(payload.indexes.tools.source_sites, 4);
     assert.ok(payload.indexes.obsidian.total > 0);
     assert.ok(payload.indexes.price_tracker.total >= 200);
-    assert.equal(payload.seo_pages.comparison_pairs, 4);
+    assert.equal(payload.seo_pages.comparison_pairs, 19);
     assert.equal(payload.seo_pages.price_segments, 5);
     assert.equal(payload.seo_pages.obsidian_scenarios, 4);
     assert.equal(payload.seo_pages.blog_articles, 5);
