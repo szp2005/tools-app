@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://tools.toolrouteai.com"),
   title,
   description,
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/favicon.ico",
   },
