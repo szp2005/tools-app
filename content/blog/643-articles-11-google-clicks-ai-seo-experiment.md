@@ -4,7 +4,7 @@ description: "A factual postmortem of a 4-month, 643-article, 4-site AI-generate
 publishedAt: "2026-05-27"
 toolName: "the free AI tools"
 toolHref: "/"
-ogImage: "/og-default.png"
+ogImage: "/og-643-articles.png"
 applicationCategory: "DeveloperApplication"
 keywords: ["AI SEO", "programmatic SEO", "indie hacker", "one-person company", "AdSense rejection", "AI content experiment"]
 featureList: ["Prompt Optimizer", "AI Tool Comparison Builder", "Obsidian Template Generator", "AI Tool Price Tracker", "Side Hustle Ideas Generator"]
